@@ -124,6 +124,16 @@
         .label-before { left: 24px; }
         .label-after { right: 24px; }
 
+        /* Shake Animation for Button */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
         /* Scroll Progress Line */
         #scroll-path-container {
             position: absolute;
@@ -191,7 +201,8 @@
             
             <!-- Left: Text Content -->
             <div class="text-left order-2 lg:order-1">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 border border-blue-500/30 text-brand-accent text-xs font-tech tracking-widest mb-8 gs-reveal backdrop-blur-md">
+                <!-- 這裡加上了 hero-badge class 以便獨立控制動畫 -->
+                <div class="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 border border-blue-500/30 text-brand-accent text-xs font-tech tracking-widest mb-8 gs-reveal backdrop-blur-md">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     PHASE I 建築工程竣工
                 </div>
@@ -339,12 +350,12 @@
             <div class="comparison-slider shadow-[0_20px_50px_rgba(0,0,0,0.5)]" id="campus-slider">
                 <!-- Replace src with actual image URLs in production -->
                 <!-- Image 2: Minecraft (Background/After) -->
-                <img src="https://images.unsplash.com/photo-1541888045617-68874136eb9f?q=80&w=2000&auto=format&fit=crop" alt="" class="slider-after">
+                <img src="./images/mc_yp.jpg" alt="延平中學虛擬校園" class="slider-after">
                 <div class="image-label label-after">ypimc 虛擬校園</div>
                 
                 <!-- Image 1: Real Life (Foreground/Before) -->
                 <div class="slider-before">
-                    <img src="https://images.unsplash.com/photo-1541888085295-814d48b1bf06?q=80&w=2000&auto=format&fit=crop" alt="">
+                    <img src="./images/real_yp.jpg" alt="延平中學真實校園">
                     <div class="image-label label-before flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
                         真實校園照片
@@ -377,23 +388,23 @@
             </svg>
         </div>
 
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <div class="inline-flex items-center gap-3 mb-8 gs-fade-up">
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 phase2-trigger">
+            <div class="inline-flex items-center gap-3 mb-8 phase2-item">
                 <span class="h-px w-8 bg-brand-accent"></span>
                 <span class="font-tech text-brand-accent tracking-[0.3em] text-sm">PHASE II . COMING SOON</span>
                 <span class="h-px w-8 bg-brand-accent"></span>
             </div>
-            <h2 class="text-5xl md:text-6xl font-bold mb-8 gs-fade-up">新生虛擬校園巡禮</h2>
-            <p class="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto gs-fade-up delay-100 font-light">
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 phase2-item">新生虛擬校園巡禮</h2>
+            <p class="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto font-light phase2-item">
                 建築階段已經完美落幕，但我們的旅程才剛開始。<br>
-                在未來的新生入學考試期間，伺服器將限時對外開放。<br>
+                為迎接即將加入的延平人，伺服器將於開學前夕專為錄取新生限時開放。<br>
                 歡迎親自登入這座栩栩如生的數位校園。
             </p>
             
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 gs-fade-up delay-200">
-                <button class="w-full sm:w-auto px-10 py-4 bg-brand-accent text-brand-dark font-bold rounded-full hover:bg-white hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] transition-all duration-300 flex items-center justify-center space-x-2 group">
-                    <span>獲取開放通知</span>
-                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 phase2-item">
+                <button id="notify-btn" class="w-full sm:w-auto px-10 py-4 bg-brand-accent text-brand-dark font-bold rounded-full hover:bg-white hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] transition-all duration-300 flex items-center justify-center space-x-2 group">
+                    <span id="notify-text">獲取開放通知</span>
+                    <svg id="notify-icon" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </button>
                 <button class="w-full sm:w-auto px-10 py-4 bg-transparent border border-gray-600 text-white font-medium rounded-full hover:border-white hover:bg-white/5 transition-all duration-300">
                     了解設備需求
@@ -412,7 +423,7 @@
             </div>
             <div class="flex space-x-8">
                 <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest">YOUTUBE</a>
-                <a href="#" class="hover:text-brand-accent transition-colors tracking-widest">CONTACT</a>
+                <a href="https://www.instagram.com/ypimc.official/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest">INSTAGRAM</a>
             </div>
         </div>
     </footer>
@@ -445,10 +456,10 @@
         // Hero Init Animation Timeline
         const heroTl = gsap.timeline({delay: 0.2});
         
-        // Text reveal
+        // Text reveal (優化：加入 filter blur 動態模糊對焦效果)
         heroTl.fromTo(".gs-reveal", 
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }
+            { y: 40, opacity: 0, filter: "blur(10px)" },
+            { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.2, stagger: 0.2, ease: "power3.out" }
         );
 
         // SVG Blueprint draw
@@ -466,6 +477,17 @@
             ease: "power2.out"
         }, "-=1.5");
         
+        // 優化：為 Phase I 標籤加入持續的漂浮與微光呼吸動畫
+        gsap.to(".hero-badge", {
+            y: "-=8", // 向上微浮動
+            boxShadow: "0 0 20px rgba(56, 189, 248, 0.5)", // 增加光暈
+            duration: 2,
+            ease: "sine.inOut",
+            yoyo: true, // 來回播放
+            repeat: -1, // 無限循環
+            delay: 1.5 // 等待進場動畫結束後才開始
+        });
+
         // --- 3. Scroll Path Animation (Global Background Line) ---
         const scrollPath = document.getElementById('page-scroll-path');
         const pathLength = scrollPath.getTotalLength();
@@ -577,6 +599,60 @@
         window.addEventListener('touchmove', (e) => {
             if(isSliding) { e.preventDefault(); slide(e); }
         }, {passive: false});
+
+        // --- 7. Phase II 專屬連貫動畫 (Stagger) ---
+        gsap.fromTo(".phase2-item",
+            { y: 40, opacity: 0, filter: "blur(10px)" }, // 初始狀態：偏下、透明、模糊
+            {
+                y: 0, 
+                opacity: 1, 
+                filter: "blur(0px)", // 結束狀態：歸位、不透明、清晰
+                duration: 1.2, 
+                stagger: 0.2, // 每個元素接續出現的時間差 (重點！)
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: ".phase2-trigger", // 以整個外層區塊作為統一觸發點
+                    start: "top 75%",
+                    toggleActions: "play none none reverse"
+                }
+            }
+        );
+
+        // --- 8. Phase II 按鈕尚未開放提示 ---
+        const notifyBtn = document.getElementById('notify-btn');
+        const notifyText = document.getElementById('notify-text');
+        const notifyIcon = document.getElementById('notify-icon');
+        let isAnimating = false; // 防連點機制
+
+        notifyBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (isAnimating) return; 
+            isAnimating = true;
+            
+            // 移除原本的樣式
+            this.classList.remove('bg-brand-accent', 'text-brand-dark', 'hover:bg-white', 'hover:shadow-[0_0_30px_rgba(56,189,248,0.5)]');
+            
+            // 加上紅色、白色文字、震動動畫與紅色發光
+            this.classList.add('bg-red-500', 'text-white', 'animate-shake', 'shadow-[0_0_20px_rgba(239,68,68,0.8)]', 'cursor-not-allowed');
+            
+            // 改變文字、隱藏箭頭圖示
+            notifyText.innerText = '尚未開放';
+            notifyIcon.classList.add('hidden'); 
+
+            // 0.4秒後移除震動類別，讓下次點擊還能再震動
+            setTimeout(() => {
+                this.classList.remove('animate-shake');
+            }, 400);
+
+            // 2.5 秒後恢復成原本的樣子
+            setTimeout(() => {
+                this.classList.remove('bg-red-500', 'text-white', 'shadow-[0_0_20px_rgba(239,68,68,0.8)]', 'cursor-not-allowed');
+                this.classList.add('bg-brand-accent', 'text-brand-dark', 'hover:bg-white', 'hover:shadow-[0_0_30px_rgba(56,189,248,0.5)]');
+                notifyText.innerText = '獲取開放通知';
+                notifyIcon.classList.remove('hidden');
+                isAnimating = false;
+            }, 2500);
+        });
 
     </script>
 </body>
