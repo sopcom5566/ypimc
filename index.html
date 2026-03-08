@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ypimc | 延平中學虛擬校園計畫</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Sans TC & Rajdhani (for numbers/tech feel) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <!-- GSAP for Motion Design -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        tech: ['"Rajdhani"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#020617',     /* Slate 950 */
+                            darker: '#000000',
+                            accent: '#38bdf8',   /* Light Blue */
+                            glow: '#818cf8',     /* Indigo glow */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+
+        /* Glowing Gradients */
+        .glow-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1) 0%, rgba(2, 6, 23, 0) 50%);
+        }
+
+        /* SVG Line Drawing Utilities */
+        .draw-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        /* Image Comparison Slider (Kept & Refined) */
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            min-height: 450px;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            cursor: ew-resize;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .comparison-slider img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            position: absolute;
+            top: 0; left: 0;
+            pointer-events: none;
+        }
+        .slider-before {
+            position: absolute;
+            top: 0; left: 0;
+            width: 50%; height: 100%;
+            overflow: hidden; z-index: 2;
+        }
+        .slider-before img {
+            width: 200%; max-width: none;
+        }
+        .slider-handle {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 2px; height: 100%;
+            background-color: #38bdf8;
+            z-index: 3;
+            transform: translateX(-50%);
+            pointer-events: none;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.8);
+        }
+        .slider-handle::after {
+            content: ''; position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px; height: 48px;
+            background-color: #020617;
+            border: 2px solid #38bdf8;
+            border-radius: 50%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2338bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2338bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>');
+            background-position: left 6px center, right 6px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+        
+        .image-label {
+            position: absolute; bottom: 24px;
+            padding: 8px 20px;
+            background: rgba(2, 6, 23, 0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white; border-radius: 99px;
+            font-size: 0.875rem; font-weight: 500;
+            backdrop-filter: blur(8px); z-index: 4;
+            letter-spacing: 0.05em;
+        }
+        .label-before { left: 24px; }
+        .label-after { right: 24px; }
+
+        /* Scroll Progress Line */
+        #scroll-path-container {
+            position: absolute;
+            top: 0; left: 50%;
+            width: 100%; height: 100%;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-accent selection:text-white relative">
+
+    <!-- Global Scroll Path Background (SVG) -->
+    <div id="scroll-path-container">
+        <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="page-scroll-path" d="M50,0 C50,100 20,150 20,250 C20,350 80,400 80,500 C80,600 50,700 50,1000" stroke="url(#paint0_linear)" stroke-width="0.5" stroke-dasharray="1000" stroke-dashoffset="1000" />
+            <defs>
+                <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="1000" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#38bdf8" stop-opacity="0" />
+                    <stop offset="0.5" stop-color="#818cf8" stop-opacity="0.5" />
+                    <stop offset="1" stop-color="#38bdf8" stop-opacity="0" />
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-500 bg-transparent border-b border-transparent" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
+            <div class="text-2xl font-tech font-bold tracking-widest flex items-center gap-2 text-white">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                YPIMC<span class="text-brand-accent">.</span>
+            </div>
+            <div class="hidden md:flex space-x-10 text-sm font-medium text-gray-400">
+                <a href="#about" class="hover:text-white transition-colors tracking-wide">計畫理念</a>
+                <a href="#gallery" class="hover:text-white transition-colors tracking-wide">建築工藝</a>
+                <a href="#phase2" class="text-brand-accent hover:text-white transition-colors tracking-wide flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                    Phase II
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-dark pt-20">
+        <!-- SVG Grid Background -->
+        <div class="absolute inset-0 z-0 opacity-20">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+
+        <!-- Ambient Glow -->
+        <div class="absolute inset-0 z-0 glow-bg opacity-60"></div>
+
+        <div class="relative z-20 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Left: Text Content -->
+            <div class="text-left order-2 lg:order-1">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 border border-blue-500/30 text-brand-accent text-xs font-tech tracking-widest mb-8 gs-reveal backdrop-blur-md">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    PHASE I 建築工程竣工
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight gs-reveal leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">
+                    重塑延平<br>數位重生
+                </h1>
+                <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-xl gs-reveal font-light leading-relaxed">
+                    這不只是一場遊戲。<br>歷經無數個夜晚，由延平人共同打造的 1:1 虛擬校園。我們將回憶與期盼，砌入兩萬多個方塊之中。
+                </p>
+                <div class="gs-reveal flex items-center gap-6">
+                    <a href="#about" class="inline-flex items-center justify-center px-8 py-4 bg-white text-brand-dark rounded-full hover:bg-brand-accent hover:text-white transition-all duration-300 font-bold tracking-wide group">
+                        探索藍圖
+                        <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                    <a href="https://youtu.be/4utuRBR8a7U" target="_blank" class="inline-flex items-center text-gray-400 hover:text-white transition-colors gap-2 font-medium">
+                        <svg class="w-10 h-10 text-brand-accent/80 hover:text-brand-accent transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        觀看紀錄片預告
+                    </a>
+                </div>
+            </div>
+
+            <!-- Right: Animated SVG Architecture Blueprint -->
+            <div class="order-1 lg:order-2 relative h-[400px] md:h-[600px] flex items-center justify-center gs-reveal">
+                <!-- Abstract Isometric Building SVG -->
+                <svg id="hero-svg" viewBox="0 0 400 400" class="w-full h-full drop-shadow-[0_0_30px_rgba(56,189,248,0.3)]">
+                    <g transform="translate(200, 200) scale(1.2)">
+                        <!-- Block 1 (Bottom) -->
+                        <path class="iso-path draw-line" d="M0,0 L80,-40 L0,-80 L-80,-40 Z" fill="rgba(56, 189, 248, 0.05)" stroke="#38bdf8" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path class="iso-path draw-line" d="M-80,-40 L0,0 L0,80 L-80,40 Z" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path class="iso-path draw-line" d="M0,0 L80,-40 L80,40 L0,80 Z" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5" stroke-linejoin="round"/>
+                        
+                        <!-- Block 2 (Middle Left) -->
+                        <g transform="translate(-40, -60)">
+                            <path class="iso-path draw-line" d="M0,0 L40,-20 L0,-40 L-40,-20 Z" fill="rgba(129, 140, 248, 0.05)" stroke="#818cf8" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path class="iso-path draw-line" d="M-40,-20 L0,0 L0,40 L-40,20 Z" fill="rgba(129, 140, 248, 0.1)" stroke="#818cf8" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path class="iso-path draw-line" d="M0,0 L40,-20 L40,20 L0,40 Z" fill="rgba(129, 140, 248, 0.15)" stroke="#818cf8" stroke-width="1.5" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Block 3 (Top) -->
+                        <g transform="translate(0, -80)">
+                            <path class="iso-path draw-line" d="M0,0 L60,-30 L0,-60 L-60,-30 Z" fill="rgba(255, 255, 255, 0.05)" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path class="iso-path draw-line" d="M-60,-30 L0,0 L0,60 L-60,30 Z" fill="rgba(255, 255, 255, 0.1)" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path class="iso-path draw-line" d="M0,0 L60,-30 L60,30 L0,60 Z" fill="rgba(255, 255, 255, 0.15)" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+                        </g>
+
+                        <!-- Connecting Lines / Wireframes -->
+                        <path class="iso-wire draw-line" d="M0,80 L0,120" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4,4"/>
+                        <path class="iso-wire draw-line" d="M-80,40 L-120,60" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4,4"/>
+                        <path class="iso-wire draw-line" d="M80,40 L120,60" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4,4"/>
+                        <circle cx="0" cy="120" r="3" fill="#38bdf8"/>
+                        <circle cx="-120" cy="60" r="3" fill="#38bdf8"/>
+                        <circle cx="120" cy="60" r="3" fill="#38bdf8"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center opacity-50 hover:opacity-100 transition-opacity">
+            <span class="text-[10px] tracking-[0.2em] font-tech text-brand-accent mb-2">SCROLL</span>
+            <div class="w-px h-12 bg-gradient-to-b from-brand-accent to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- About & Data Section -->
+    <section id="about" class="py-32 relative z-10 border-t border-white/5 bg-brand-darker">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                
+                <!-- Text Content & Animated Numbers -->
+                <div class="order-2 lg:order-1 gs-fade-up">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-8">母校的數位典藏</h2>
+                    <p class="text-gray-400 mb-12 leading-relaxed text-lg font-light">
+                        第一階段的建築工程現已全面竣工。從校門口的磚瓦、操場的跑道，到每一間教室的課桌椅，我們皆以最高標準進行考究與 1:1 還原。這不僅是一件送給在校生與校友的禮物，更是未來新生認識延平的最佳數位導覽。
+                    </p>
+                    
+                    <!-- Advanced Data Grid with SVG Icons -->
+                    <div class="grid grid-cols-2 gap-8 text-sm text-gray-400">
+                        <!-- Stat 1 -->
+                        <div class="flex flex-col group">
+                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-white font-tech font-bold text-4xl mb-1 flex items-baseline">
+                                <span class="counter" data-target="100">0</span><span class="text-xl text-brand-accent ml-1">%</span>
+                            </span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500">第一階段建築完成</span>
+                        </div>
+                        <!-- Stat 2 -->
+                        <div class="flex flex-col group">
+                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                            <span class="text-white font-tech font-bold text-4xl mb-1">1:1</span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500">真實比例精準還原</span>
+                        </div>
+                        <!-- Stat 3 -->
+                        <div class="flex flex-col group">
+                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-white font-tech font-bold text-4xl mb-1 flex items-baseline">
+                                <span class="counter" data-target="4">0</span><span class="text-xl text-brand-accent ml-2">個月</span>
+                            </span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500">日夜不懈的工程耗時</span>
+                        </div>
+                        <!-- Stat 4 -->
+                        <div class="flex flex-col group">
+                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                            <span class="text-white font-tech font-bold text-4xl mb-1 flex items-baseline">
+                                <span class="counter" data-target="20000">0</span><span class="text-xl text-brand-accent ml-1">+</span>
+                            </span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500">總建築方塊堆疊數</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Thumbnail Link (Sleek UI) -->
+                <div class="order-1 lg:order-2 gs-fade-left relative rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 group cursor-pointer">
+                    <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="block relative w-full pb-[56.25%] bg-black rounded-2xl overflow-hidden">
+                        <!-- Glow Effect -->
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-brand-glow opacity-30 blur group-hover:opacity-70 transition duration-1000 z-0"></div>
+                        
+                        <!-- YouTube Thumbnail -->
+                        <img src="https://img.youtube.com/vi/4utuRBR8a7U/maxresdefault.jpg" alt="延平建造之路紀錄片" class="absolute top-0 left-0 w-full h-full object-cover z-10 opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
+                        
+                        <!-- Play Button Overlay -->
+                        <div class="absolute inset-0 z-20 flex items-center justify-center">
+                            <div class="w-20 h-20 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-brand-accent group-hover:border-brand-accent group-hover:scale-110 transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_40px_rgba(56,189,248,0.6)]">
+                                <svg class="w-8 h-8 text-white ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Craftsmanship Gallery Section -->
+    <section id="gallery" class="py-32 bg-brand-dark relative z-10 border-t border-white/5">
+        <div class="absolute inset-0 glow-bg opacity-30"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 text-center mb-16 gs-fade-up relative z-20">
+            <h2 class="text-3xl md:text-5xl font-bold mb-6">虛實交錯的極致工藝</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg">拖曳下方滑桿，親自見證現實校園與 ypimc 虛擬世界的驚人重合度。</p>
+        </div>
+
+        <div class="max-w-6xl mx-auto px-6 gs-fade-up relative z-20">
+            <!-- Premium Slider Container -->
+            <div class="comparison-slider shadow-[0_20px_50px_rgba(0,0,0,0.5)]" id="campus-slider">
+                <!-- Replace src with actual image URLs in production -->
+                <!-- Image 2: Minecraft (Background/After) -->
+                <img src="https://images.unsplash.com/photo-1541888045617-68874136eb9f?q=80&w=2000&auto=format&fit=crop" alt="" class="slider-after">
+                <div class="image-label label-after">ypimc 虛擬校園</div>
+                
+                <!-- Image 1: Real Life (Foreground/Before) -->
+                <div class="slider-before">
+                    <img src="https://images.unsplash.com/photo-1541888085295-814d48b1bf06?q=80&w=2000&auto=format&fit=crop" alt="">
+                    <div class="image-label label-before flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                        真實校園照片
+                    </div>
+                </div>
+                
+                <!-- Handle -->
+                <div class="slider-handle"></div>
+            </div>
+            
+            <div class="mt-8 flex justify-center items-center gap-2 text-sm text-gray-500 font-tech tracking-widest">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                DRAG TO COMPARE
+            </div>
+        </div>
+    </section>
+
+    <!-- Phase 2 Teaser Section -->
+    <section id="phase2" class="py-40 relative overflow-hidden bg-brand-darker border-t border-white/5">
+        <!-- Abstract Tech Background -->
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%">
+                <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                    <path d="M10,50 L40,50 L50,40 L90,40 M50,40 L50,10" fill="none" stroke="#38bdf8" stroke-width="1"/>
+                    <circle cx="90" cy="40" r="2" fill="#38bdf8"/>
+                    <circle cx="50" cy="10" r="2" fill="#38bdf8"/>
+                    <circle cx="10" cy="50" r="2" fill="#38bdf8"/>
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#circuit)" />
+            </svg>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <div class="inline-flex items-center gap-3 mb-8 gs-fade-up">
+                <span class="h-px w-8 bg-brand-accent"></span>
+                <span class="font-tech text-brand-accent tracking-[0.3em] text-sm">PHASE II . COMING SOON</span>
+                <span class="h-px w-8 bg-brand-accent"></span>
+            </div>
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 gs-fade-up">新生虛擬校園巡禮</h2>
+            <p class="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto gs-fade-up delay-100 font-light">
+                建築階段已經完美落幕，但我們的旅程才剛開始。<br>
+                在未來的新生入學考試期間，伺服器將限時對外開放。<br>
+                歡迎親自登入這座栩栩如生的數位校園。
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 gs-fade-up delay-200">
+                <button class="w-full sm:w-auto px-10 py-4 bg-brand-accent text-brand-dark font-bold rounded-full hover:bg-white hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] transition-all duration-300 flex items-center justify-center space-x-2 group">
+                    <span>獲取開放通知</span>
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+                <button class="w-full sm:w-auto px-10 py-4 bg-transparent border border-gray-600 text-white font-medium rounded-full hover:border-white hover:bg-white/5 transition-all duration-300">
+                    了解設備需求
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 font-tech">
+            <div class="mb-4 md:mb-0 flex items-center gap-2">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                <span class="text-lg font-bold text-white tracking-widest">YPIMC<span class="text-brand-accent">.</span></span> 
+                <span class="ml-4">&copy; 2026 YPIMC團隊。REBUILDING MEMORIES.</span>
+            </div>
+            <div class="flex space-x-8">
+                <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest">YOUTUBE</a>
+                <a href="#" class="hover:text-brand-accent transition-colors tracking-widest">CONTACT</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- 1. Navigation Setup ---
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('backdrop-blur-md', 'bg-brand-dark/80', 'border-white/10');
+                navbar.classList.remove('bg-transparent', 'border-transparent');
+            } else {
+                navbar.classList.remove('backdrop-blur-md', 'bg-brand-dark/80', 'border-white/10');
+                navbar.classList.add('bg-transparent', 'border-transparent');
+            }
+        });
+
+        // --- 2. Hero SVG Draw Animation ---
+        // Setup initial state for drawing paths
+        const paths = document.querySelectorAll('.draw-line');
+        paths.forEach(path => {
+            const length = path.getTotalLength();
+            path.style.strokeDasharray = length;
+            path.style.strokeDashoffset = length;
+        });
+
+        // Hero Init Animation Timeline
+        const heroTl = gsap.timeline({delay: 0.2});
+        
+        // Text reveal
+        heroTl.fromTo(".gs-reveal", 
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out" }
+        );
+
+        // SVG Blueprint draw
+        heroTl.to(".iso-path", {
+            strokeDashoffset: 0,
+            duration: 2,
+            stagger: 0.15,
+            ease: "power2.inOut"
+        }, "-=1");
+
+        heroTl.to(".iso-wire", {
+            strokeDashoffset: 0,
+            duration: 1.5,
+            stagger: 0.1,
+            ease: "power2.out"
+        }, "-=1.5");
+        
+        // --- 3. Scroll Path Animation (Global Background Line) ---
+        const scrollPath = document.getElementById('page-scroll-path');
+        const pathLength = scrollPath.getTotalLength();
+        scrollPath.style.strokeDasharray = pathLength;
+        scrollPath.style.strokeDashoffset = pathLength;
+
+        gsap.to(scrollPath, {
+            strokeDashoffset: 0,
+            ease: "none",
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1 // smooth scrubbing
+            }
+        });
+
+        // --- 4. Number Counter Animation ---
+        const counters = document.querySelectorAll('.counter');
+        
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'));
+            
+            ScrollTrigger.create({
+                trigger: counter,
+                start: "top 85%",
+                once: true,
+                onEnter: () => {
+                    gsap.to(counter, {
+                        innerHTML: target,
+                        duration: 2.5,
+                        ease: "power3.out",
+                        snap: { innerHTML: 1 },
+                        onUpdate: function() {
+                            // Format with commas if target is large (e.g. 20,000)
+                            if (target > 1000) {
+                                counter.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        // --- 5. Generic Fade Up Animations ---
+        gsap.utils.toArray(".gs-fade-up").forEach(elem => {
+            gsap.fromTo(elem,
+                { y: 50, opacity: 0 },
+                { 
+                    y: 0, opacity: 1, duration: 1, ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        gsap.utils.toArray(".gs-fade-left").forEach(elem => {
+            gsap.fromTo(elem,
+                { x: 50, opacity: 0 },
+                { 
+                    y: 0, opacity: 1, x:0, duration: 1, ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // --- 6. Image Comparison Slider Logic ---
+        const slider = document.getElementById('campus-slider');
+        const sliderBefore = slider.querySelector('.slider-before');
+        const sliderBeforeImg = slider.querySelector('.slider-before img');
+        const handle = slider.querySelector('.slider-handle');
+        let isSliding = false;
+
+        function resizeSlider() {
+            sliderBeforeImg.style.width = slider.offsetWidth + 'px';
+        }
+        window.addEventListener('resize', resizeSlider);
+        resizeSlider();
+
+        function slide(e) {
+            if (!isSliding) return;
+            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            if (!clientX) return;
+
+            const rect = slider.getBoundingClientRect();
+            let xPos = clientX - rect.left;
+            
+            if (xPos < 0) xPos = 0;
+            if (xPos > rect.width) xPos = rect.width;
+
+            const percent = (xPos / rect.width) * 100;
+            sliderBefore.style.width = percent + '%';
+            handle.style.left = percent + '%';
+        }
+
+        slider.addEventListener('mousedown', (e) => { isSliding = true; slide(e); });
+        window.addEventListener('mouseup', () => isSliding = false);
+        window.addEventListener('mousemove', slide);
+        
+        slider.addEventListener('touchstart', (e) => { isSliding = true; slide(e); }, {passive: true});
+        window.addEventListener('touchend', () => isSliding = false);
+        window.addEventListener('touchmove', (e) => {
+            if(isSliding) { e.preventDefault(); slide(e); }
+        }, {passive: false});
+
+    </script>
+</body>
+</html>
