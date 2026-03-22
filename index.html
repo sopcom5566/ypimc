@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ypimc | 延平中學虛擬校園計畫</title>
+    <title>YPIMC | 延平中學虛擬校園計畫</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Noto Sans TC & Rajdhani (for numbers/tech feel) -->
+    <!-- Google Fonts: Noto Sans TC & Rajdhani -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <!-- GSAP for Motion Design -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -26,6 +26,7 @@
                             darker: '#000000',
                             accent: '#38bdf8',   /* Light Blue */
                             glow: '#818cf8',     /* Indigo glow */
+                            surface: '#0f172a'   /* Slate 900 */
                         }
                     }
                 }
@@ -41,122 +42,94 @@
         }
         
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #020617; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
 
         /* Glowing Gradients */
-        .glow-bg {
-            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1) 0%, rgba(2, 6, 23, 0) 50%);
-        }
+        .glow-bg { background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15) 0%, rgba(2, 6, 23, 0) 60%); }
+        .glass-panel { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
 
         /* SVG Line Drawing Utilities */
-        .draw-line {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-        }
+        .draw-line { stroke-dasharray: 2000; stroke-dashoffset: 2000; }
 
-        /* Image Comparison Slider (Kept & Refined) */
+        /* Image Comparison Slider */
         .comparison-slider {
-            position: relative;
-            width: 100%;
-            height: 70vh;
-            min-height: 450px;
-            overflow: hidden;
-            border-radius: 1.5rem;
-            cursor: ew-resize;
+            position: relative; width: 100%; height: 75vh; min-height: 500px;
+            overflow: hidden; border-radius: 1.5rem; cursor: ew-resize;
             border: 1px solid rgba(255,255,255,0.1);
         }
         .comparison-slider img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            position: absolute;
-            top: 0; left: 0;
-            pointer-events: none;
+            width: 100%; height: 100%; object-fit: cover; object-position: center;
+            position: absolute; top: 0; left: 0; pointer-events: none;
         }
         .slider-before {
-            position: absolute;
-            top: 0; left: 0;
-            width: 50%; height: 100%;
-            overflow: hidden; z-index: 2;
+            position: absolute; top: 0; left: 0; width: 50%; height: 100%;
+            overflow: hidden; z-index: 2; border-right: 2px solid #38bdf8;
+            box-shadow: 5px 0 20px rgba(0,0,0,0.5);
         }
-        .slider-before img {
-            width: 200%; max-width: none;
-        }
+        .slider-before img { width: 200%; max-width: none; }
         .slider-handle {
-            position: absolute;
-            top: 0; left: 50%;
-            width: 2px; height: 100%;
-            background-color: #38bdf8;
-            z-index: 3;
-            transform: translateX(-50%);
+            position: absolute; top: 0; left: 50%; width: 2px; height: 100%;
+            background-color: transparent; z-index: 3; transform: translateX(-50%);
             pointer-events: none;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.8);
         }
         .slider-handle::after {
-            content: ''; position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 48px; height: 48px;
-            background-color: #020617;
-            border: 2px solid #38bdf8;
-            border-radius: 50%;
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 48px; height: 48px; background-color: #020617; border: 2px solid #38bdf8;
+            border-radius: 50%; box-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2338bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2338bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>');
-            background-position: left 6px center, right 6px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            background-position: left 6px center, right 6px center; background-repeat: no-repeat; background-size: 16px;
         }
         
         .image-label {
-            position: absolute; bottom: 24px;
-            padding: 8px 20px;
-            background: rgba(2, 6, 23, 0.7);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white; border-radius: 99px;
-            font-size: 0.875rem; font-weight: 500;
-            backdrop-filter: blur(8px); z-index: 4;
-            letter-spacing: 0.05em;
+            position: absolute; bottom: 32px; padding: 10px 24px;
+            background: rgba(2, 6, 23, 0.8); border: 1px solid rgba(56,189,248,0.3);
+            color: white; border-radius: 99px; font-size: 0.875rem; font-weight: 700;
+            backdrop-filter: blur(12px); z-index: 4; letter-spacing: 0.1em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .label-before { left: 24px; }
-        .label-after { right: 24px; }
+        .label-before { left: 32px; }
+        .label-after { right: 32px; }
 
-        /* Shake Animation for Button */
+        /* Button Shake Animation */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
-        .animate-shake {
-            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
-        }
+        .animate-shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
 
-        /* Scroll Progress Line */
+        /* Global Scroll Path */
         #scroll-path-container {
-            position: absolute;
-            top: 0; left: 50%;
-            width: 100%; height: 100%;
-            transform: translateX(-50%);
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+            position: fixed; top: 0; left: 50%; width: 100vw; height: 100vh;
+            transform: translateX(-50%); pointer-events: none; z-index: 0; mix-blend-mode: screen;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-brand-accent selection:text-white relative">
+<body class="antialiased selection:bg-brand-accent selection:text-brand-dark relative">
 
-    <!-- Global Scroll Path Background (SVG) -->
-    <div id="scroll-path-container">
-        <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path id="page-scroll-path" d="M50,0 C50,100 20,150 20,250 C20,350 80,400 80,500 C80,600 50,700 50,1000" stroke="url(#paint0_linear)" stroke-width="0.5" stroke-dasharray="1000" stroke-dashoffset="1000" />
+    <!-- Global Fixed Background Animation (Mouse Parallax) -->
+    <div id="bg-grid" class="fixed inset-0 z-0 opacity-[0.03] pointer-events-none transition-transform duration-1000 ease-out">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-                <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="1000" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#38bdf8" stop-opacity="0" />
-                    <stop offset="0.5" stop-color="#818cf8" stop-opacity="0.5" />
-                    <stop offset="1" stop-color="#38bdf8" stop-opacity="0" />
+                <pattern id="main-grid" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#ffffff" stroke-width="1"/>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#main-grid)" />
+        </svg>
+    </div>
+
+    <!-- Global Scroll Line -->
+    <div id="scroll-path-container">
+        <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="50" y1="0" x2="50" y2="100" id="page-scroll-path" stroke="url(#paint0_linear)" stroke-width="0.2" stroke-dasharray="100" stroke-dashoffset="100" />
+            <defs>
+                <linearGradient id="paint0_linear" x1="50" y1="0" x2="50" y2="100" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#38bdf8" stop-opacity="1" />
+                    <stop offset="1" stop-color="#818cf8" stop-opacity="0" />
                 </linearGradient>
             </defs>
         </svg>
@@ -165,12 +138,12 @@
     <!-- Navigation -->
     <nav class="fixed w-full z-50 transition-all duration-500 bg-transparent border-b border-transparent" id="navbar">
         <div class="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-            <div class="text-2xl font-tech font-bold tracking-widest flex items-center gap-2 text-white">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+            <div class="text-2xl font-tech font-bold tracking-widest flex items-center gap-2 text-white cursor-pointer" onclick="window.scrollTo(0,0)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
                 YPIMC<span class="text-brand-accent">.</span>
             </div>
             <div class="hidden md:flex space-x-10 text-sm font-medium text-gray-400">
-                <a href="#about" class="hover:text-white transition-colors tracking-wide">計畫理念</a>
+                <a href="#vision" class="hover:text-white transition-colors tracking-wide">核心理念</a>
                 <a href="#gallery" class="hover:text-white transition-colors tracking-wide">建築工藝</a>
                 <a href="#phase2" class="text-brand-accent hover:text-white transition-colors tracking-wide flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
@@ -180,53 +153,39 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-dark pt-20">
-        <!-- SVG Grid Background -->
-        <div class="absolute inset-0 z-0 opacity-20">
-            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.5"/>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-            </svg>
-        </div>
-
-        <!-- Ambient Glow -->
-        <div class="absolute inset-0 z-0 glow-bg opacity-60"></div>
+    <!-- 1. Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-dark pt-20 border-b border-white/5">
+        <div class="absolute inset-0 z-0 glow-bg opacity-80"></div>
 
         <div class="relative z-20 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
             <!-- Left: Text Content -->
             <div class="text-left order-2 lg:order-1">
-                <!-- 這裡加上了 hero-badge class 以便獨立控制動畫 -->
                 <div class="hero-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 border border-blue-500/30 text-brand-accent text-xs font-tech tracking-widest mb-8 gs-reveal backdrop-blur-md">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     PHASE I 建築工程竣工
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight gs-reveal leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight gs-reveal leading-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-600 drop-shadow-lg">
                     重塑延平<br>數位重生
                 </h1>
                 <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-xl gs-reveal font-light leading-relaxed">
-                    這不只是一場遊戲。<br>歷經無數個夜晚，由延平人共同打造的 1:1 虛擬校園。我們將回憶與期盼，砌入兩萬多個方塊之中。
+                    這不只是一場遊戲。歷經無數個夜晚，由延平人共同打造的 1:1 虛擬校園。我們將青春與記憶，精準地砌入二十多萬個方塊之中。
                 </p>
-                <div class="gs-reveal flex items-center gap-6">
-                    <a href="#about" class="inline-flex items-center justify-center px-8 py-4 bg-white text-brand-dark rounded-full hover:bg-brand-accent hover:text-white transition-all duration-300 font-bold tracking-wide group">
+                <div class="gs-reveal flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <a href="#vision" class="inline-flex items-center justify-center px-8 py-4 bg-white text-brand-dark rounded-full hover:bg-brand-accent hover:text-white transition-all duration-300 font-bold tracking-wide group shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(56,189,248,0.6)]">
                         探索藍圖
                         <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </a>
-                    <a href="https://youtu.be/4utuRBR8a7U" target="_blank" class="inline-flex items-center text-gray-400 hover:text-white transition-colors gap-2 font-medium">
-                        <svg class="w-10 h-10 text-brand-accent/80 hover:text-brand-accent transition-colors" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        觀看紀錄片預告
+                    <a href="https://youtu.be/4utuRBR8a7U" target="_blank" class="inline-flex items-center text-gray-400 hover:text-white transition-colors gap-3 font-medium group">
+                        <div class="w-12 h-12 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-brand-accent group-hover:bg-brand-accent/10 transition-colors">
+                            <svg class="w-4 h-4 text-brand-accent ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                        觀看紀錄片
                     </a>
                 </div>
             </div>
 
             <!-- Right: Animated SVG Architecture Blueprint -->
-            <div class="order-1 lg:order-2 relative h-[400px] md:h-[600px] flex items-center justify-center gs-reveal">
-                <!-- Abstract Isometric Building SVG -->
+            <div class="order-1 lg:order-2 relative h-[400px] md:h-[600px] flex items-center justify-center gs-reveal perspective-1000">
                 <svg id="hero-svg" viewBox="0 0 400 400" class="w-full h-full drop-shadow-[0_0_30px_rgba(56,189,248,0.3)]">
                     <g transform="translate(200, 200) scale(1.2)">
                         <!-- Block 1 (Bottom) -->
@@ -260,98 +219,96 @@
             </div>
         </div>
 
-        <!-- Scroll Down Indicator -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center opacity-50 hover:opacity-100 transition-opacity">
-            <span class="text-[10px] tracking-[0.2em] font-tech text-brand-accent mb-2">SCROLL</span>
-            <div class="w-px h-12 bg-gradient-to-b from-brand-accent to-transparent"></div>
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center opacity-60 animate-bounce">
+            <span class="text-[10px] tracking-[0.3em] font-tech text-brand-accent mb-3">SCROLL</span>
+            <div class="w-px h-16 bg-gradient-to-b from-brand-accent to-transparent"></div>
         </div>
     </section>
 
-    <!-- About & Data Section -->
-    <section id="about" class="py-32 relative z-10 border-t border-white/5 bg-brand-darker">
+    <!-- 2. Vision Quote Section -->
+    <section id="vision" class="py-32 relative z-10 bg-brand-darker flex items-center justify-center border-b border-white/5">
+        <div class="max-w-5xl mx-auto px-6 text-center text-trigger">
+            <svg class="w-12 h-12 mx-auto text-gray-700 mb-8 quote-item" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/></svg>
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-black leading-tight text-white mb-2 quote-item drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                記憶或許會隨時間褪色，<br>但在這裡，每一塊磚瓦都永恆不朽。
+            </h2>
+        </div>
+    </section>
+
+    <!-- 3. About & Data Section -->
+    <section id="about" class="py-32 relative z-10 border-b border-white/5 bg-brand-dark">
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-brand-accent/5 to-transparent pointer-events-none"></div>
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                 
-                <!-- Text Content & Animated Numbers -->
-                <div class="order-2 lg:order-1 gs-fade-up">
-                    <h2 class="text-3xl md:text-5xl font-bold mb-8">母校的數位典藏</h2>
-                    <p class="text-gray-400 mb-12 leading-relaxed text-lg font-light">
-                        第一階段的建築工程現已全面竣工。從校門口的磚瓦、操場的跑道，到每一間教室的課桌椅，我們皆以最高標準進行考究與 1:1 還原。這不僅是一件送給在校生與校友的禮物，更是未來新生認識延平的最佳數位導覽。
+                <div class="order-2 lg:order-1 data-trigger">
+                    <div class="inline-flex items-center gap-3 mb-6 data-item">
+                        <span class="h-px w-6 bg-brand-accent"></span>
+                        <span class="font-tech text-brand-accent tracking-[0.2em] text-sm font-bold">PROJECT DATA</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 data-item">母校的數位典藏</h2>
+                    <p class="text-gray-400 mb-12 leading-relaxed text-lg font-light data-item">
+                        第一階段的建築工程現已全面竣工。從校門口的經典磁磚、操場的跑道紋理，到每一間教室的課桌椅與黑板，我們皆以最高標準進行實地勘查與 1:1 還原。這不僅是一件送給在校生與校友的禮物，更是未來新生認識延平的最佳數位導覽。
                     </p>
                     
-                    <!-- Advanced Data Grid with SVG Icons -->
-                    <div class="grid grid-cols-2 gap-8 text-sm text-gray-400">
-                        <!-- Stat 1 -->
-                        <div class="flex flex-col group">
-                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span class="text-white font-tech font-bold text-4xl mb-1 flex items-baseline">
-                                <span class="counter" data-target="100">0</span><span class="text-xl text-brand-accent ml-1">%</span>
+                    <div class="grid grid-cols-2 gap-x-8 gap-y-12 text-sm text-gray-400">
+                        <div class="flex flex-col group data-item">
+                            <span class="text-white font-tech font-bold text-5xl mb-1 flex items-baseline">
+                                <span class="counter" data-target="100">0</span><span class="text-2xl text-brand-accent ml-1">%</span>
                             </span>
-                            <span class="tracking-widest text-xs uppercase text-gray-500">第一階段建築完成</span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500 font-bold border-t border-white/10 pt-2 mt-2">第一階段建築完成</span>
                         </div>
-                        <!-- Stat 2 -->
-                        <div class="flex flex-col group">
-                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-                            <span class="text-white font-tech font-bold text-4xl mb-1">1:1</span>
-                            <span class="tracking-widest text-xs uppercase text-gray-500">真實比例精準還原</span>
+                        <div class="flex flex-col group data-item">
+                            <span class="text-white font-tech font-bold text-5xl mb-1 flex items-baseline">1:1</span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500 font-bold border-t border-white/10 pt-2 mt-2">真實比例精準還原</span>
                         </div>
-                        <!-- Stat 3 -->
-                        <div class="flex flex-col group">
-                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                            <span class="text-white font-tech font-bold text-4xl mb-1 flex items-baseline">
-                                <span class="counter" data-target="4">0</span><span class="text-xl text-brand-accent ml-2">個月</span>
+                        <div class="flex flex-col group data-item">
+                            <span class="text-white font-tech font-bold text-5xl mb-1 flex items-baseline">
+                                <span class="counter" data-target="4">0</span><span class="text-2xl text-brand-accent ml-2">個月</span>
                             </span>
-                            <span class="tracking-widest text-xs uppercase text-gray-500">日夜不懈的工程耗時</span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500 font-bold border-t border-white/10 pt-2 mt-2">日夜不懈的工程耗時</span>
                         </div>
-                        <!-- Stat 4 -->
-                        <div class="flex flex-col group">
-                            <svg class="w-8 h-8 text-brand-accent mb-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                            <span class="text-white font-tech font-bold text-4xl mb-1 flex items-baseline">
-                                <span class="counter" data-target="20000">0</span><span class="text-xl text-brand-accent ml-1">+</span>
+                        <div class="flex flex-col group data-item">
+                            <span class="text-white font-tech font-bold text-5xl mb-1 flex items-baseline">
+                                <span class="counter" data-target="200000">0</span><span class="text-2xl text-brand-accent ml-1">+</span>
                             </span>
-                            <span class="tracking-widest text-xs uppercase text-gray-500">總建築方塊堆疊數</span>
+                            <span class="tracking-widest text-xs uppercase text-gray-500 font-bold border-t border-white/10 pt-2 mt-2">總建築方塊堆疊數</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Video Thumbnail Link (Sleek UI) -->
-                <div class="order-1 lg:order-2 gs-fade-left relative rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 group cursor-pointer">
+                <!-- Video Thumbnail -->
+                <div class="order-1 lg:order-2 data-item relative rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 group cursor-pointer">
                     <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="block relative w-full pb-[56.25%] bg-black rounded-2xl overflow-hidden">
-                        <!-- Glow Effect -->
-                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-brand-glow opacity-30 blur group-hover:opacity-70 transition duration-1000 z-0"></div>
-                        
-                        <!-- YouTube Thumbnail -->
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-accent to-brand-glow opacity-30 blur-xl group-hover:opacity-100 transition duration-1000 z-0"></div>
                         <img src="https://img.youtube.com/vi/4utuRBR8a7U/maxresdefault.jpg" alt="延平建造之路紀錄片" class="absolute top-0 left-0 w-full h-full object-cover z-10 opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700">
-                        
-                        <!-- Play Button Overlay -->
                         <div class="absolute inset-0 z-20 flex items-center justify-center">
-                            <div class="w-20 h-20 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-brand-accent group-hover:border-brand-accent group-hover:scale-110 transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_40px_rgba(56,189,248,0.6)]">
+                            <div class="w-20 h-20 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:bg-brand-accent group-hover:border-brand-accent group-hover:scale-110 transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
                                 <svg class="w-8 h-8 text-white ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                             </div>
                         </div>
                     </a>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Craftsmanship Gallery Section -->
-    <section id="gallery" class="py-32 bg-brand-dark relative z-10 border-t border-white/5">
+    <!-- 4. Craftsmanship Gallery Section -->
+    <section id="gallery" class="py-32 bg-brand-dark relative z-10 border-b border-white/5">
         <div class="absolute inset-0 glow-bg opacity-30"></div>
         
-        <div class="max-w-7xl mx-auto px-6 text-center mb-16 gs-fade-up relative z-20">
-            <h2 class="text-3xl md:text-5xl font-bold mb-6">虛實交錯的極致工藝</h2>
-            <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg">拖曳下方滑桿，親自見證現實校園與 ypimc 虛擬世界的驚人重合度。</p>
+        <div class="max-w-7xl mx-auto px-6 text-center mb-16 gallery-trigger relative z-20">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 gallery-item">虛實交錯的極致工藝</h2>
+            <p class="text-gray-400 max-w-2xl mx-auto font-light text-lg gallery-item">拖曳下方滑桿，親自見證現實校園磁磚紋理與 Minecraft 虛擬世界的驚人重合度。</p>
         </div>
 
-        <div class="max-w-6xl mx-auto px-6 gs-fade-up relative z-20">
+        <div class="max-w-6xl mx-auto px-6 gallery-item relative z-20">
             <!-- Premium Slider Container -->
-            <div class="comparison-slider shadow-[0_20px_50px_rgba(0,0,0,0.5)]" id="campus-slider">
-                <!-- Replace src with actual image URLs in production -->
+            <div class="comparison-slider shadow-[0_20px_50px_rgba(0,0,0,0.6)] rounded-2xl overflow-hidden ring-1 ring-white/10" id="campus-slider">
                 <!-- Image 2: Minecraft (Background/After) -->
-                <img src="./images/mc_yp.jpg" alt="延平中學虛擬校園" class="slider-after">
-                <div class="image-label label-after">ypimc 虛擬校園</div>
+                <img src="./images/mc_yp.jpg" alt="延平中學 Minecraft 虛擬校園" class="slider-after">
+                <div class="image-label label-after">YPIMC 虛擬校園</div>
                 
                 <!-- Image 1: Real Life (Foreground/Before) -->
                 <div class="slider-before">
@@ -361,22 +318,21 @@
                         真實校園照片
                     </div>
                 </div>
-                
                 <!-- Handle -->
                 <div class="slider-handle"></div>
             </div>
             
-            <div class="mt-8 flex justify-center items-center gap-2 text-sm text-gray-500 font-tech tracking-widest">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <div class="mt-10 flex justify-center items-center gap-3 text-sm text-brand-accent font-tech tracking-[0.2em] font-bold">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
                 DRAG TO COMPARE
             </div>
         </div>
     </section>
 
-    <!-- Phase 2 Teaser Section -->
+    <!-- 5. Phase 2 Teaser Section (With Image Preview) -->
     <section id="phase2" class="py-40 relative overflow-hidden bg-brand-darker border-t border-white/5">
         <!-- Abstract Tech Background -->
-        <div class="absolute inset-0 opacity-10">
+        <div class="absolute inset-0 opacity-[0.08]">
             <svg width="100%" height="100%">
                 <pattern id="circuit" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
                     <path d="M10,50 L40,50 L50,40 L90,40 M50,40 L50,10" fill="none" stroke="#38bdf8" stroke-width="1"/>
@@ -388,42 +344,65 @@
             </svg>
         </div>
 
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10 phase2-trigger">
-            <div class="inline-flex items-center gap-3 mb-8 phase2-item">
-                <span class="h-px w-8 bg-brand-accent"></span>
-                <span class="font-tech text-brand-accent tracking-[0.3em] text-sm">PHASE II . COMING SOON</span>
-                <span class="h-px w-8 bg-brand-accent"></span>
-            </div>
-            <h2 class="text-5xl md:text-6xl font-bold mb-8 phase2-item">新生虛擬校園巡禮</h2>
-            <p class="text-xl text-gray-400 mb-12 leading-relaxed max-w-2xl mx-auto font-light phase2-item">
-                建築階段已經完美落幕，但我們的旅程才剛開始。<br>
-                為迎接即將加入的延平人，伺服器將於開學前夕專為錄取新生限時開放。<br>
-                歡迎親自登入這座栩栩如生的數位校園。
-            </p>
-            
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-6 phase2-item">
-                <button id="notify-btn" class="w-full sm:w-auto px-10 py-4 bg-brand-accent text-brand-dark font-bold rounded-full hover:bg-white hover:shadow-[0_0_30px_rgba(56,189,248,0.5)] transition-all duration-300 flex items-center justify-center space-x-2 group">
-                    <span id="notify-text">獲取開放通知</span>
-                    <svg id="notify-icon" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
-                <button class="w-full sm:w-auto px-10 py-4 bg-transparent border border-gray-600 text-white font-medium rounded-full hover:border-white hover:bg-white/5 transition-all duration-300">
-                    了解設備需求
-                </button>
+        <div class="max-w-6xl mx-auto px-6 relative z-10 phase2-trigger">
+            <!-- 雙欄排版的玻璃面板 -->
+            <div class="glass-panel p-10 md:p-16 rounded-[3rem] grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- 左側文案與按鈕 -->
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center justify-center lg:justify-start gap-4 mb-8 phase2-item w-full">
+                        <span class="h-px w-8 lg:w-12 bg-gradient-to-r from-transparent to-brand-accent"></span>
+                        <span class="font-tech text-brand-accent tracking-[0.4em] text-sm font-bold">PHASE II . COMING SOON</span>
+                        <span class="h-px w-8 lg:w-12 bg-gradient-to-l from-transparent to-brand-accent lg:hidden"></span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-black mb-6 phase2-item drop-shadow-md">新生虛擬校園巡禮</h2>
+                    <p class="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed font-light phase2-item">
+                        建築階段已經完美落幕，但我們的旅程才剛開始。<br>
+                        為迎接即將加入的延平人，伺服器將於<span class="text-brand-accent font-bold">開學前夕</span>專為錄取新生限時開放。<br>
+                        歡迎親自登入這座栩栩如生的數位校園。
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-4 phase2-item">
+                        <button id="notify-btn" class="px-8 py-4 bg-brand-accent text-brand-dark font-bold rounded-full hover:bg-white hover:shadow-[0_0_40px_rgba(56,189,248,0.6)] transition-all duration-300 flex items-center justify-center space-x-2 group text-base md:text-lg">
+                            <span id="notify-text">獲取開放通知</span>
+                            <svg id="notify-icon" class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </button>
+                        <button class="px-8 py-4 bg-transparent border border-gray-600 text-white font-medium rounded-full hover:border-white hover:bg-white/10 transition-all duration-300 text-base md:text-lg">
+                            了解設備需求
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 右側伺服器內部圖片預覽區 -->
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl phase2-item group border border-white/10 aspect-video lg:aspect-square xl:aspect-video w-full">
+                    <div class="absolute inset-0 bg-brand-accent/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                    <!-- 替換圖片說明：把 src 裡面的網址改成你要展示的伺服器內部照片，例如 src="./images/server-preview.jpg" -->
+                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1200&auto=format&fit=crop" alt="伺服器內部預覽" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+                    
+                    <!-- 圖片上的小標籤 -->
+                    <div class="absolute bottom-4 left-4 z-20 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-xs text-white font-tech tracking-widest flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span>
+                        SERVER PREVIEW
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 bg-black py-12 relative z-10">
+    <footer class="border-t border-white/10 bg-[#000000] py-16 relative z-10">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 font-tech">
-            <div class="mb-4 md:mb-0 flex items-center gap-2">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-                <span class="text-lg font-bold text-white tracking-widest">YPIMC<span class="text-brand-accent">.</span></span> 
-                <span class="ml-4">&copy; 2026 YPIMC團隊。REBUILDING MEMORIES.</span>
+            <div class="mb-6 md:mb-0 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8">
+                <div class="flex items-center gap-2">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                    <span class="text-xl font-bold text-white tracking-widest">YPIMC<span class="text-brand-accent">.</span></span> 
+                </div>
+                <span class="text-center md:text-left">&copy; 2026 YPIMC PROJECT TEAM.<br>REBUILDING MEMORIES, BLOCK BY BLOCK.</span>
             </div>
-            <div class="flex space-x-8">
-                <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest">YOUTUBE</a>
-                <a href="https://www.instagram.com/ypimc.official/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest">INSTAGRAM</a>
+            <div class="flex space-x-10 text-base">
+                <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest font-bold">YOUTUBE</a>
+                <a href="https://www.instagram.com/ypimc.official/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-accent transition-colors tracking-widest font-bold">INSTAGRAM</a>
             </div>
         </div>
     </footer>
@@ -432,20 +411,26 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- 1. Navigation Setup ---
+        // --- 1. Mouse Parallax for Background Grid ---
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            document.getElementById('bg-grid').style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // --- 2. Navigation Blur on Scroll ---
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
-                navbar.classList.add('backdrop-blur-md', 'bg-brand-dark/80', 'border-white/10');
+                navbar.classList.add('backdrop-blur-xl', 'bg-brand-dark/80', 'border-white/10');
                 navbar.classList.remove('bg-transparent', 'border-transparent');
             } else {
-                navbar.classList.remove('backdrop-blur-md', 'bg-brand-dark/80', 'border-white/10');
+                navbar.classList.remove('backdrop-blur-xl', 'bg-brand-dark/80', 'border-white/10');
                 navbar.classList.add('bg-transparent', 'border-transparent');
             }
         });
 
-        // --- 2. Hero SVG Draw Animation ---
-        // Setup initial state for drawing paths
+        // --- 3. Hero Init Animation ---
         const paths = document.querySelectorAll('.draw-line');
         paths.forEach(path => {
             const length = path.getTotalLength();
@@ -453,138 +438,80 @@
             path.style.strokeDashoffset = length;
         });
 
-        // Hero Init Animation Timeline
         const heroTl = gsap.timeline({delay: 0.2});
         
-        // Text reveal (優化：加入 filter blur 動態模糊對焦效果)
         heroTl.fromTo(".gs-reveal", 
             { y: 40, opacity: 0, filter: "blur(10px)" },
             { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.2, stagger: 0.2, ease: "power3.out" }
         );
 
-        // SVG Blueprint draw
-        heroTl.to(".iso-path", {
-            strokeDashoffset: 0,
-            duration: 2,
-            stagger: 0.15,
-            ease: "power2.inOut"
-        }, "-=1");
-
-        heroTl.to(".iso-wire", {
-            strokeDashoffset: 0,
-            duration: 1.5,
-            stagger: 0.1,
-            ease: "power2.out"
-        }, "-=1.5");
+        heroTl.to(".iso-path", { strokeDashoffset: 0, duration: 2, stagger: 0.15, ease: "power2.inOut" }, "-=1");
+        heroTl.to(".iso-wire", { strokeDashoffset: 0, duration: 1.5, stagger: 0.1, ease: "power2.out" }, "-=1.5");
         
-        // 優化：為 Phase I 標籤加入持續的漂浮與微光呼吸動畫
+        // Hero Badge breathing animation
         gsap.to(".hero-badge", {
-            y: "-=8", // 向上微浮動
-            boxShadow: "0 0 20px rgba(56, 189, 248, 0.5)", // 增加光暈
-            duration: 2,
-            ease: "sine.inOut",
-            yoyo: true, // 來回播放
-            repeat: -1, // 無限循環
-            delay: 1.5 // 等待進場動畫結束後才開始
+            y: "-=8", boxShadow: "0 0 20px rgba(56, 189, 248, 0.4)", duration: 2,
+            ease: "sine.inOut", yoyo: true, repeat: -1, delay: 1.5
         });
 
-        // --- 3. Scroll Path Animation (Global Background Line) ---
-        const scrollPath = document.getElementById('page-scroll-path');
-        const pathLength = scrollPath.getTotalLength();
-        scrollPath.style.strokeDasharray = pathLength;
-        scrollPath.style.strokeDashoffset = pathLength;
-
-        gsap.to(scrollPath, {
-            strokeDashoffset: 0,
-            ease: "none",
-            scrollTrigger: {
-                trigger: "body",
-                start: "top top",
-                end: "bottom bottom",
-                scrub: 1 // smooth scrubbing
+        // --- 4. Vision Quote Stagger Animation ---
+        gsap.fromTo(".quote-item",
+            { y: 50, opacity: 0, filter: "blur(5px)" },
+            { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.5, stagger: 0.3, ease: "power3.out",
+              scrollTrigger: { trigger: ".text-trigger", start: "top 80%", toggleActions: "play none none reverse" }
             }
-        });
+        );
 
-        // --- 4. Number Counter Animation ---
+        // --- 5. Data Section Stagger & Counters ---
+        gsap.fromTo(".data-item",
+            { x: -30, opacity: 0 },
+            { x: 0, opacity: 1, duration: 1, stagger: 0.15, ease: "power3.out",
+              scrollTrigger: { trigger: ".data-trigger", start: "top 75%", toggleActions: "play none none reverse" }
+            }
+        );
+
         const counters = document.querySelectorAll('.counter');
-        
         counters.forEach(counter => {
             const target = parseInt(counter.getAttribute('data-target'));
-            
             ScrollTrigger.create({
-                trigger: counter,
-                start: "top 85%",
-                once: true,
+                trigger: ".data-trigger", start: "top 75%", once: true,
                 onEnter: () => {
                     gsap.to(counter, {
-                        innerHTML: target,
-                        duration: 2.5,
-                        ease: "power3.out",
-                        snap: { innerHTML: 1 },
+                        innerHTML: target, duration: 2.5, ease: "power3.out", snap: { innerHTML: 1 },
                         onUpdate: function() {
-                            // Format with commas if target is large (e.g. 20,000)
-                            if (target > 1000) {
-                                counter.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString();
-                            }
+                            if (target > 1000) counter.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString();
                         }
                     });
                 }
             });
         });
 
-        // --- 5. Generic Fade Up Animations ---
-        gsap.utils.toArray(".gs-fade-up").forEach(elem => {
-            gsap.fromTo(elem,
-                { y: 50, opacity: 0 },
-                { 
-                    y: 0, opacity: 1, duration: 1, ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        });
+        // --- 6. Gallery Section Animation ---
+        gsap.fromTo(".gallery-item",
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1.2, stagger: 0.2, ease: "power3.out",
+              scrollTrigger: { trigger: ".gallery-trigger", start: "top 80%", toggleActions: "play none none reverse" }
+            }
+        );
 
-        gsap.utils.toArray(".gs-fade-left").forEach(elem => {
-            gsap.fromTo(elem,
-                { x: 50, opacity: 0 },
-                { 
-                    y: 0, opacity: 1, x:0, duration: 1, ease: "power3.out",
-                    scrollTrigger: {
-                        trigger: elem,
-                        start: "top 85%",
-                        toggleActions: "play none none reverse"
-                    }
-                }
-            );
-        });
-
-        // --- 6. Image Comparison Slider Logic ---
+        // Image Comparison Slider Logic
         const slider = document.getElementById('campus-slider');
         const sliderBefore = slider.querySelector('.slider-before');
         const sliderBeforeImg = slider.querySelector('.slider-before img');
         const handle = slider.querySelector('.slider-handle');
         let isSliding = false;
 
-        function resizeSlider() {
-            sliderBeforeImg.style.width = slider.offsetWidth + 'px';
-        }
-        window.addEventListener('resize', resizeSlider);
-        resizeSlider();
+        function resizeSlider() { sliderBeforeImg.style.width = slider.offsetWidth + 'px'; }
+        window.addEventListener('resize', resizeSlider); resizeSlider();
 
         function slide(e) {
             if (!isSliding) return;
             let clientX = e.clientX || (e.touches && e.touches[0].clientX);
             if (!clientX) return;
-
             const rect = slider.getBoundingClientRect();
             let xPos = clientX - rect.left;
-            
             if (xPos < 0) xPos = 0;
             if (xPos > rect.width) xPos = rect.width;
-
             const percent = (xPos / rect.width) * 100;
             sliderBefore.style.width = percent + '%';
             handle.style.left = percent + '%';
@@ -593,61 +520,38 @@
         slider.addEventListener('mousedown', (e) => { isSliding = true; slide(e); });
         window.addEventListener('mouseup', () => isSliding = false);
         window.addEventListener('mousemove', slide);
-        
         slider.addEventListener('touchstart', (e) => { isSliding = true; slide(e); }, {passive: true});
         window.addEventListener('touchend', () => isSliding = false);
-        window.addEventListener('touchmove', (e) => {
-            if(isSliding) { e.preventDefault(); slide(e); }
-        }, {passive: false});
+        window.addEventListener('touchmove', (e) => { if(isSliding) { e.preventDefault(); slide(e); } }, {passive: false});
 
-        // --- 7. Phase II 專屬連貫動畫 (Stagger) ---
+        // --- 7. Phase II Animation & Button Shake ---
         gsap.fromTo(".phase2-item",
-            { y: 40, opacity: 0, filter: "blur(10px)" }, // 初始狀態：偏下、透明、模糊
-            {
-                y: 0, 
-                opacity: 1, 
-                filter: "blur(0px)", // 結束狀態：歸位、不透明、清晰
-                duration: 1.2, 
-                stagger: 0.2, // 每個元素接續出現的時間差 (重點！)
-                ease: "power3.out",
-                scrollTrigger: {
-                    trigger: ".phase2-trigger", // 以整個外層區塊作為統一觸發點
-                    start: "top 75%",
-                    toggleActions: "play none none reverse"
-                }
+            { y: 40, opacity: 0, filter: "blur(10px)" },
+            { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.2, stagger: 0.2, ease: "power3.out",
+              scrollTrigger: { trigger: ".phase2-trigger", start: "top 75%", toggleActions: "play none none reverse" }
             }
         );
 
-        // --- 8. Phase II 按鈕尚未開放提示 ---
         const notifyBtn = document.getElementById('notify-btn');
         const notifyText = document.getElementById('notify-text');
         const notifyIcon = document.getElementById('notify-icon');
-        let isAnimating = false; // 防連點機制
+        let isAnimating = false;
 
         notifyBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (isAnimating) return; 
             isAnimating = true;
             
-            // 移除原本的樣式
-            this.classList.remove('bg-brand-accent', 'text-brand-dark', 'hover:bg-white', 'hover:shadow-[0_0_30px_rgba(56,189,248,0.5)]');
-            
-            // 加上紅色、白色文字、震動動畫與紅色發光
+            this.classList.remove('bg-brand-accent', 'text-brand-dark', 'hover:bg-white', 'hover:shadow-[0_0_40px_rgba(56,189,248,0.6)]');
             this.classList.add('bg-red-500', 'text-white', 'animate-shake', 'shadow-[0_0_20px_rgba(239,68,68,0.8)]', 'cursor-not-allowed');
-            
-            // 改變文字、隱藏箭頭圖示
-            notifyText.innerText = '尚未開放';
+            notifyText.innerText = '系統尚未開放';
             notifyIcon.classList.add('hidden'); 
 
-            // 0.4秒後移除震動類別，讓下次點擊還能再震動
-            setTimeout(() => {
-                this.classList.remove('animate-shake');
-            }, 400);
+            setTimeout(() => { this.classList.remove('animate-shake'); }, 400);
 
-            // 2.5 秒後恢復成原本的樣子
             setTimeout(() => {
                 this.classList.remove('bg-red-500', 'text-white', 'shadow-[0_0_20px_rgba(239,68,68,0.8)]', 'cursor-not-allowed');
-                this.classList.add('bg-brand-accent', 'text-brand-dark', 'hover:bg-white', 'hover:shadow-[0_0_30px_rgba(56,189,248,0.5)]');
+                this.classList.add('bg-brand-accent', 'text-brand-dark', 'hover:bg-white', 'hover:shadow-[0_0_40px_rgba(56,189,248,0.6)]');
                 notifyText.innerText = '獲取開放通知';
                 notifyIcon.classList.remove('hidden');
                 isAnimating = false;
