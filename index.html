@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YPIMC | 延平中學虛擬校園計畫 (Material 3)</title>
+    <title>YPIMC | 延平中學虛擬校園計畫</title>
+    <meta name="description" content="歷時數月實地丈量，以二十多萬顆方塊 1:1 砌出延平記憶。伺服器《YPIMC LIVE》將於 2027 年 6 月正式開放。">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Noto Sans TC & Outfit (M3 Style) -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- GSAP for Motion Design -->
+
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -17,485 +23,1451 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Noto Sans TC"', 'sans-serif'],
-                        display: ['"Outfit"', 'sans-serif'],
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Inter"', '"Noto Sans TC"', 'sans-serif'],
+                        display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Inter"', '"Noto Sans TC"', 'sans-serif'],
                     },
-                    // Material 3 Dark Theme Palette (Expressive)
                     colors: {
-                        m3: {
-                            bg: '#141218',
-                            surface: '#1D1B20',
-                            'surface-container-low': '#1C1B1F',
-                            'surface-container': '#211F26',
-                            'surface-container-high': '#2B2930',
-                            'surface-container-highest': '#36343B',
-                            'on-surface': '#E6E1E5',
-                            'on-surface-variant': '#CAC4D0',
-                            primary: '#D0BCFF',
-                            'on-primary': '#381E72',
-                            'primary-container': '#4F378B',
-                            'on-primary-container': '#E8DEF8',
-                            secondary: '#CCC2DC',
-                            'on-secondary': '#332D41',
-                            tertiary: '#EFB8C8',
-                            'on-tertiary': '#492532',
-                            'tertiary-container': '#633B48',
-                            'on-tertiary-container': '#FFD8E4',
-                            error: '#F2B8B5',
-                            'on-error': '#601410',
-                            'error-container': '#8C1D18',
-                            'on-error-container': '#F9DEDC',
-                            outline: '#938F99',
+                        apple: {
+                            white: '#FFFFFF',
+                            gray: '#F5F5F7',
+                            ink: '#1D1D1F',
+                            secondary: '#86868B',
+                            muted: '#D2D2D7',
+                            blue: '#0071E3',
+                            'blue-hover': '#0077ED',
+                            emerald: '#0D9488',
+                            mint: '#CBE8BA',
                         }
-                    },
-                    borderRadius: {
-                        'm3-sm': '8px',
-                        'm3-md': '12px',
-                        'm3-lg': '16px',
-                        'm3-xl': '28px', // M3 Card standard
-                        'm3-2xl': '32px',
-                        'm3-3xl': '48px', // M3 Large blocks
                     }
                 }
             }
         }
     </script>
+
     <style>
+        :root {
+            --apple-ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --bg-white: #FFFFFF;
+            --bg-gray: #F5F5F7;
+            --ink: #1D1D1F;
+            --secondary: #86868B;
+            --blue: #0071E3;
+            --emerald: #0D9488;
+        }
+
+        html, body {
+            max-width: 100%;
+            overflow-x: clip;
+        }
+
         body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #141218;
-            color: #E6E1E5;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Noto Sans TC", sans-serif;
+            background-color: #FFFFFF;
+            color: #1D1D1F;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-tap-highlight-color: transparent;
         }
-        
-        /* M3 Scrollbar */
+
+        /* Minimalist Apple Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #141218; }
-        ::-webkit-scrollbar-thumb { background: #49454F; border-radius: 99px; }
-        ::-webkit-scrollbar-thumb:hover { background: #938F99; }
+        ::-webkit-scrollbar-track { background: #F5F5F7; }
+        ::-webkit-scrollbar-thumb { background: #C7C7CC; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #86868B; }
 
-        /* M3 Abstract Expressive Background Blobs */
-        .m3-blob {
-            position: absolute;
-            filter: blur(80px);
-            opacity: 0.15;
-            border-radius: 50%;
-            z-index: 0;
-            pointer-events: none;
+        /* Sticky Frosted-Glass Sub-Nav */
+        .apple-subnav {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
 
-        /* SVG Line Drawing Utilities */
-        .draw-line { stroke-dasharray: 2000; stroke-dashoffset: 2000; }
+        /* Monumental Fluid Typography */
+        .hero-headline {
+            font-size: clamp(3.2rem, 8.5vw, 7.5rem);
+            line-height: 1.04;
+            letter-spacing: -0.035em;
+            font-weight: 800;
+        }
 
-        /* M3 Image Comparison Slider */
-        .comparison-slider {
-            position: relative; width: 100%; height: 75vh; min-height: 500px;
-            overflow: hidden; cursor: ew-resize;
-            border: 1px solid rgba(147, 143, 153, 0.2);
+        .manifesto-headline {
+            font-size: clamp(2rem, 4.8vw, 4.25rem);
+            line-height: 1.24;
+            letter-spacing: -0.03em;
+            font-weight: 800;
         }
-        .comparison-slider img {
-            width: 100%; height: 100%; object-fit: cover; object-position: center;
-            position: absolute; top: 0; left: 0; pointer-events: none;
+
+        .act-headline {
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            line-height: 1.05;
+            letter-spacing: -0.032em;
+            font-weight: 800;
         }
-        .slider-before {
-            position: absolute; top: 0; left: 0; width: 50%; height: 100%;
-            overflow: hidden; z-index: 2; border-right: 4px solid #D0BCFF;
+
+        .section-headline {
+            font-size: clamp(2.25rem, 4.8vw, 4rem);
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            font-weight: 800;
         }
-        .slider-before img { width: 200%; max-width: none; }
-        .slider-handle {
-            position: absolute; top: 0; left: 50%; width: 4px; height: 100%;
-            background-color: transparent; z-index: 3; transform: translateX(-50%);
-            pointer-events: none;
+
+        /* Masked Line-by-Line Clip-Path Reveal */
+        .clip-mask-line {
+            overflow: hidden;
+            display: block;
+            padding-bottom: 0.06em;
         }
-        /* M3 FAB Handle */
-        .slider-handle::after {
-            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 56px; height: 56px; background-color: #D0BCFF;
-            border-radius: 16px; /* M3 FAB shape */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23381E72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>'), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23381E72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>');
-            background-position: left 8px center, right 8px center; background-repeat: no-repeat; background-size: 20px;
-            box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3);
+        .clip-mask-inner {
+            display: block;
+            will-change: transform, clip-path;
         }
-        
-        /* M3 Chip Labels */
-        .image-label {
-            position: absolute; bottom: 32px; padding: 8px 16px;
-            background: #2B2930; color: #E8DEF8; border-radius: 8px;
-            font-size: 0.875rem; font-weight: 500; font-family: 'Outfit', sans-serif;
-            z-index: 4; display: flex; align-items: center; gap: 8px;
+
+        /* Subtle Architectural Blueprint Grid & Crosshairs */
+        .architectural-grid {
+            background-image:
+                linear-gradient(to right, rgba(29, 29, 31, 0.035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(29, 29, 31, 0.035) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 35%, transparent 100%);
+            -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 42%, #000 35%, transparent 100%);
         }
-        .label-before { left: 32px; }
-        .label-after { right: 32px; }
+
+        /* Scroll-Lit Manifesto Lines */
+        .manifesto-line {
+            color: #D2D2D7;
+            display: block;
+            transition: color 0.45s var(--apple-ease), transform 0.55s var(--apple-ease);
+            transform: translateY(6px);
+        }
+        .manifesto-line.is-lit {
+            color: #1D1D1F;
+            transform: translateY(0);
+        }
+        .manifesto-line.is-lit .manifesto-accent {
+            color: #0D9488;
+        }
+        .manifesto-accent {
+            color: inherit;
+            transition: color 0.45s var(--apple-ease);
+        }
+
+        /* Apple Pro Bento Card */
+        .apple-bento-card {
+            border-radius: 28px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            transition: transform 0.5s var(--apple-ease), box-shadow 0.5s var(--apple-ease);
+        }
+        @media (hover: hover) {
+            .apple-bento-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 24px 52px rgba(0, 0, 0, 0.06);
+            }
+        }
+
+        /* Frosted Play Button Badge */
+        .frosted-play-badge {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            transition: transform 0.45s var(--apple-ease), background-color 0.3s ease;
+        }
+        .group:hover .frosted-play-badge {
+            transform: scale(1.08);
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        /* Smooth FAQ Accordion */
+        .faq-panel {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.42s var(--apple-ease);
+        }
+        .faq-item.is-open .faq-panel {
+            grid-template-rows: 1fr;
+        }
+        .faq-panel-inner {
+            overflow: hidden;
+        }
+        .faq-icon {
+            transition: transform 0.38s var(--apple-ease);
+        }
+        .faq-item.is-open .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Mobile Slide-Down Drawer */
+        .mobile-menu-drawer {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.42s var(--apple-ease), opacity 0.3s ease;
+        }
+        .mobile-menu-drawer.is-open {
+            max-height: 400px;
+            opacity: 1;
+        }
     </style>
 </head>
-<body class="antialiased selection:bg-m3-primary selection:text-m3-on-primary relative">
+<body class="selection:bg-apple-blue selection:text-white">
 
-    <!-- M3 Expressive Background -->
-    <div class="m3-blob w-[600px] h-[600px] bg-m3-primary top-[-100px] left-[-200px]"></div>
-    <div class="m3-blob w-[500px] h-[500px] bg-m3-tertiary top-[40%] right-[-100px]"></div>
-    <div class="m3-blob w-[800px] h-[800px] bg-m3-primary-container bottom-[-200px] left-[20%] opacity-10"></div>
-
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 transition-all duration-300 bg-transparent" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-display font-bold flex items-center gap-2 text-m3-on-surface cursor-pointer" onclick="window.scrollTo(0,0)">
-                <!-- Material Icon -->
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" class="text-m3-primary"><path d="M12 2L2 22h20L12 2zm0 3.8l6.1 12.2H5.9L12 5.8z"/></svg>
-                YPIMC
+    <!-- =====================================================================
+         1. STICKY FROSTED-GLASS SUB-NAV + TOP SCROLL PROGRESS BAR
+         ===================================================================== -->
+    <header class="fixed top-0 left-0 right-0 z-50 apple-subnav">
+        <!-- Thin Top Scroll Progress Indicator (2px) -->
+        <div class="w-full h-[2px] bg-black/[0.04] overflow-hidden" aria-hidden="true">
+            <div id="scroll-progress-bar"
+                 class="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-apple-blue to-apple-emerald will-change-transform">
             </div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium font-display text-m3-on-surface-variant">
-                <a href="#vision" class="hover:text-m3-primary transition-colors py-2">核心理念</a>
-                <a href="#gallery" class="hover:text-m3-primary transition-colors py-2">建築工藝</a>
-                <a href="#phase2" class="px-4 py-2 bg-m3-secondary text-m3-on-secondary rounded-full hover:bg-m3-primary hover:text-m3-on-primary transition-colors flex items-center gap-2">
-                    Phase II
+        </div>
+
+        <div class="max-w-[1160px] mx-auto h-14 sm:h-16 px-4 sm:px-6 flex items-center justify-between gap-4">
+            <!-- Left: Clean Apple-Style Wordmark -->
+            <a href="#hero" class="flex items-center min-h-[44px] pr-2 shrink-0 group" aria-label="YPIMC 首頁">
+                <span class="font-display text-lg sm:text-xl font-bold tracking-tight text-apple-ink transition-opacity duration-200 group-hover:opacity-70">
+                    YPIMC
+                </span>
+            </a>
+
+            <!-- Center/Right Desktop Anchors + Primary Pill CTA -->
+            <div class="hidden md:flex items-center gap-7">
+                <nav class="flex items-center gap-6 text-[13px] font-medium text-apple-ink/80" aria-label="主導覽列">
+                    <a href="#manifesto" class="hover:text-apple-ink transition-colors py-2">核心宣言</a>
+                    <a href="#three-acts" class="hover:text-apple-ink transition-colors py-2">三大亮點</a>
+                    <a href="#highlights" class="hover:text-apple-ink transition-colors py-2">重點一覽</a>
+                    <a href="#milestones" class="hover:text-apple-ink transition-colors py-2">開發歷程</a>
+                    <a href="#faq" class="hover:text-apple-ink transition-colors py-2">常見問題</a>
+                </nav>
+                <button type="button"
+                        onclick="openTheaterModal('GZqicEcCrY0')"
+                        class="min-h-[36px] px-4 py-1.5 rounded-full bg-apple-blue hover:bg-apple-blue-hover text-white text-xs font-medium tracking-tight transition-colors">
+                    觀看預告片
+                </button>
+            </div>
+
+            <!-- Mobile Compact Bar: Primary CTA Pill + Hamburger Toggle -->
+            <div class="flex md:hidden items-center gap-2">
+                <button type="button"
+                        onclick="openTheaterModal('GZqicEcCrY0')"
+                        class="min-h-[38px] px-4 rounded-full bg-apple-blue hover:bg-apple-blue-hover text-white text-xs font-medium transition-colors">
+                    觀看預告片
+                </button>
+                <button type="button"
+                        id="mobile-menu-toggle"
+                        aria-label="切換導覽選單"
+                        aria-expanded="false"
+                        class="w-11 h-11 rounded-full text-apple-ink hover:bg-black/5 flex items-center justify-center transition-colors">
+                    <svg id="hamburger-open" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" d="M4 8.5h16M4 15.5h16"/>
+                    </svg>
+                    <svg id="hamburger-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Slide-Down Drawer -->
+        <div id="mobile-menu-drawer" class="mobile-menu-drawer md:hidden bg-white/95 border-t border-black/[0.06] px-5">
+            <nav class="py-3 flex flex-col divide-y divide-black/[0.06] text-[15px] font-medium text-apple-ink" aria-label="手機版導覽選單">
+                <a href="#manifesto" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
+                    <span>核心宣言</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
                 </a>
-            </div>
+                <a href="#three-acts" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
+                    <span>三大亮點</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
+                </a>
+                <a href="#highlights" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
+                    <span>重點一覽</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
+                </a>
+                <a href="#milestones" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
+                    <span>開發歷程</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
+                </a>
+                <a href="#faq" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
+                    <span>常見問題</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
+                </a>
+            </nav>
         </div>
-    </nav>
+    </header>
 
-    <!-- 1. Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div class="relative z-20 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- Left: Text Content -->
-            <div class="text-left order-2 lg:order-1">
-                <!-- M3 Chip -->
-                <div class="hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-m3-tertiary-container text-m3-on-tertiary-container text-sm font-display font-medium mb-8 gs-reveal">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    PHASE I 建築工程竣工
+    <main>
+
+        <!-- =================================================================
+             2. HERO SECTION WITH PARALLAX & SCRUBBED PORTAL EXPANSION (#FFFFFF)
+             ================================================================= -->
+        <section id="hero" class="relative bg-apple-white pt-28 sm:pt-36 pb-20 sm:pb-32 overflow-hidden">
+            <!-- Architectural Grid Backdrop -->
+            <div class="absolute inset-0 architectural-grid pointer-events-none" aria-hidden="true"></div>
+
+            <!-- Giant Horizontal Scrubbed Watermark ("YPIMC LIVE") -->
+            <div class="absolute top-24 sm:top-28 left-0 right-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+                <div id="hero-watermark"
+                     class="font-display font-black text-[24vw] leading-none tracking-tighter text-black/[0.03] whitespace-nowrap will-change-transform">
+                    YPIMC LIVE
                 </div>
-                <!-- M3 Display Typography -->
-                <h1 class="text-6xl md:text-7xl lg:text-[80px] font-bold mb-6 gs-reveal leading-[1.1] text-m3-on-surface">
-                    重塑延平<br>
-                    <span class="text-m3-primary">數位重生</span>
+            </div>
+
+            <!-- Hero Copy Block (Scales down & fades with depth blur as Cinema Stage expands) -->
+            <div id="hero-copy-block" class="relative z-10 max-w-[1060px] mx-auto px-5 sm:px-8 text-center will-change-transform">
+                <!-- Giant Display Headline with Masked Line-by-Line Clip-Path Upward Reveal -->
+                <h1 class="font-display hero-headline text-apple-ink mb-6 sm:mb-7">
+                    <span class="clip-mask-line">
+                        <span class="clip-mask-inner hero-clip-line">重塑延平。</span>
+                    </span>
+                    <span class="clip-mask-line">
+                        <span class="clip-mask-inner hero-clip-line text-apple-ink/90">群起喝采之地。</span>
+                    </span>
                 </h1>
-                <p class="text-lg md:text-xl text-m3-on-surface-variant mb-10 max-w-xl gs-reveal leading-relaxed">
-                    這不只是一場遊戲。歷經無數個夜晚，由延平人共同打造的 1:1 虛擬校園。我們將青春與記憶，精準地砌入二十多萬個方塊之中。
+
+                <!-- Concise Subtitle -->
+                <p class="hero-fade text-base sm:text-xl md:text-[23px] font-normal text-apple-secondary max-w-2xl mx-auto leading-relaxed mb-9 sm:mb-11">
+                    歷時數月實地丈量，以二十多萬顆方塊 1:1 砌出延平記憶。伺服器《YPIMC LIVE》將於 2027 年 6 月正式開放。
                 </p>
-                <div class="gs-reveal flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                    <!-- M3 Filled Button -->
-                    <a href="#vision" class="inline-flex items-center justify-center px-8 py-4 bg-m3-primary text-m3-on-primary rounded-full hover:bg-[#E8DEF8] transition-colors font-display font-semibold text-lg">
-                        探索藍圖
-                    </a>
-                    <!-- M3 Text/Tonal Button -->
-                    <a href="https://youtu.be/4utuRBR8a7U" target="_blank" class="inline-flex items-center px-6 py-4 rounded-full text-m3-secondary hover:bg-m3-surface-container-highest transition-colors gap-3 font-display font-medium">
-                        <svg class="w-6 h-6 text-m3-tertiary" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                        觀看紀錄片
-                    </a>
+
+                <!-- Dual Apple CTAs -->
+                <div class="hero-fade flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-7 mb-14 sm:mb-20">
+                    <button type="button"
+                            onclick="openTheaterModal('GZqicEcCrY0')"
+                            class="w-full sm:w-auto min-h-[52px] px-7 py-3.5 rounded-full bg-apple-blue hover:bg-apple-blue-hover text-white text-[15px] sm:text-base font-medium transition-colors inline-flex items-center justify-center gap-2">
+                        <span>觀看《YPIMC LIVE》概念片</span>
+                    </button>
+
+                    <button type="button"
+                            onclick="openTheaterModal('FOpiZEy4mGs')"
+                            class="min-h-[44px] px-4 py-2 text-apple-blue hover:underline text-[15px] sm:text-base font-medium inline-flex items-center justify-center gap-1">
+                        <span>觀看建造紀錄片</span>
+                        <span aria-hidden="true">&rsaquo;</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Right: Animated SVG (Redesigned with M3 colors & playful shapes) -->
-            <div class="order-1 lg:order-2 relative h-[400px] md:h-[600px] flex items-center justify-center gs-reveal">
-                <svg id="hero-svg" viewBox="0 0 400 400" class="w-full h-full">
-                    <g transform="translate(200, 200) scale(1.2)">
-                        <!-- Block 1 (M3 Surface Container) -->
-                        <path class="iso-path draw-line" d="M0,0 L80,-40 L0,-80 L-80,-40 Z" fill="#2B2930" stroke="#4F378B" stroke-width="2" stroke-linejoin="round"/>
-                        <path class="iso-path draw-line" d="M-80,-40 L0,0 L0,80 L-80,40 Z" fill="#211F26" stroke="#4F378B" stroke-width="2" stroke-linejoin="round"/>
-                        <path class="iso-path draw-line" d="M0,0 L80,-40 L80,40 L0,80 Z" fill="#36343B" stroke="#4F378B" stroke-width="2" stroke-linejoin="round"/>
-                        
-                        <!-- Block 2 (M3 Primary) -->
-                        <g transform="translate(-40, -60)">
-                            <path class="iso-path draw-line" d="M0,0 L40,-20 L0,-40 L-40,-20 Z" fill="#E8DEF8" stroke="#D0BCFF" stroke-width="2" stroke-linejoin="round"/>
-                            <path class="iso-path draw-line" d="M-40,-20 L0,0 L0,40 L-40,20 Z" fill="#4F378B" stroke="#D0BCFF" stroke-width="2" stroke-linejoin="round"/>
-                            <path class="iso-path draw-line" d="M0,0 L40,-20 L40,20 L0,40 Z" fill="#D0BCFF" stroke="#D0BCFF" stroke-width="2" stroke-linejoin="round"/>
-                        </g>
+            <!-- Expanding 16:9 Cinema Stage Card -->
+            <div class="relative z-10 w-full px-4 sm:px-6 flex justify-center">
+                <div id="hero-cinema-card"
+                     class="hero-fade w-full md:w-[78%] max-w-[1680px] aspect-video rounded-[24px] md:rounded-[32px] overflow-hidden bg-apple-ink relative group shadow-[0_28px_72px_rgba(0,0,0,0.14)] border border-black/[0.08] will-change-transform">
 
-                        <!-- Block 3 (M3 Tertiary) -->
-                        <g transform="translate(0, -80)">
-                            <path class="iso-path draw-line" d="M0,0 L60,-30 L0,-60 L-60,-30 Z" fill="#FFD8E4" stroke="#EFB8C8" stroke-width="2" stroke-linejoin="round"/>
-                            <path class="iso-path draw-line" d="M-60,-30 L0,0 L0,60 L-60,30 Z" fill="#633B48" stroke="#EFB8C8" stroke-width="2" stroke-linejoin="round"/>
-                            <path class="iso-path draw-line" d="M0,0 L60,-30 L60,30 L0,60 Z" fill="#EFB8C8" stroke="#EFB8C8" stroke-width="2" stroke-linejoin="round"/>
-                        </g>
-                    </g>
-                </svg>
-            </div>
-        </div>
-    </section>
+                    <!-- Clickable Video Canvas -->
+                    <div id="hero-stage-trigger"
+                         onclick="openActiveStageVideo()"
+                         role="button"
+                         tabindex="0"
+                         aria-label="播放精選影片"
+                         onkeydown="if(event.key==='Enter'||event.key===' ')openActiveStageVideo()"
+                         class="w-full h-full relative cursor-pointer">
+                        <img id="hero-stage-poster"
+                             src="https://img.youtube.com/vi/GZqicEcCrY0/maxresdefault.jpg"
+                             onerror="this.onerror=null;this.src='https://img.youtube.com/vi/GZqicEcCrY0/hqdefault.jpg';"
+                             alt="《YPIMC LIVE》氛圍概念展示"
+                             class="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]">
 
-    <!-- 2. Vision Quote Section (M3 Surface) -->
-    <section id="vision" class="py-32 relative z-10 bg-m3-surface-container-low flex items-center justify-center">
-        <div class="max-w-5xl mx-auto px-6 text-center text-trigger">
-            <div class="w-16 h-16 mx-auto bg-m3-tertiary-container rounded-2xl flex items-center justify-center mb-8 quote-item">
-                <svg class="w-8 h-8 text-m3-on-tertiary-container" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/></svg>
-            </div>
-            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-m3-on-surface mb-2 quote-item">
-                記憶或許會隨時間褪色，<br>但在這裡，每一塊磚瓦都永恆不朽。
-            </h2>
-        </div>
-    </section>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
 
-    <!-- 3. About & Data Section -->
-    <section id="about" class="py-32 relative z-10 bg-m3-bg">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                
-                <div class="order-2 lg:order-1 data-trigger">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-6 data-item text-m3-on-surface">母校的數位典藏</h2>
-                    <p class="text-m3-on-surface-variant mb-12 leading-relaxed text-lg data-item">
-                        第一階段的建築工程現已全面竣工。從校門口的經典磁磚、操場的跑道紋理，到每一間教室的課桌椅與黑板，我們皆以最高標準進行實地勘查與 1:1 還原。這不僅是一件送給在校生與校友的禮物，更是未來新生認識延平的最佳數位導覽。
-                    </p>
-                    
-                    <!-- M3 Cards Grid -->
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="bg-m3-surface-container rounded-m3-xl p-6 flex flex-col data-item transition-transform hover:-translate-y-1">
-                            <span class="text-m3-primary font-display font-bold text-5xl mb-2 flex items-baseline">
-                                <span class="counter" data-target="100">0</span><span class="text-2xl ml-1">%</span>
-                            </span>
-                            <span class="text-sm font-medium text-m3-on-surface-variant">第一階段建築完成</span>
-                        </div>
-                        <div class="bg-m3-surface-container rounded-m3-xl p-6 flex flex-col data-item transition-transform hover:-translate-y-1">
-                            <span class="text-m3-primary font-display font-bold text-5xl mb-2 flex items-baseline">1:1</span>
-                            <span class="text-sm font-medium text-m3-on-surface-variant">真實比例精準還原</span>
-                        </div>
-                        <div class="bg-m3-surface-container rounded-m3-xl p-6 flex flex-col data-item transition-transform hover:-translate-y-1">
-                            <span class="text-m3-primary font-display font-bold text-5xl mb-2 flex items-baseline">
-                                <span class="counter" data-target="4">0</span><span class="text-2xl ml-2 text-m3-on-surface-variant">個月</span>
-                            </span>
-                            <span class="text-sm font-medium text-m3-on-surface-variant">日夜不懈的工程耗時</span>
-                        </div>
-                        <div class="bg-m3-surface-container rounded-m3-xl p-6 flex flex-col data-item transition-transform hover:-translate-y-1">
-                            <span class="text-m3-tertiary font-display font-bold text-5xl mb-2 flex items-baseline">
-                                <span class="counter" data-target="200000">0</span><span class="text-2xl ml-1">+</span>
-                            </span>
-                            <span class="text-sm font-medium text-m3-on-surface-variant">總建築方塊堆疊數</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- M3 Large Image Card -->
-                <div class="order-1 lg:order-2 data-item relative rounded-m3-3xl overflow-hidden bg-m3-surface-container-high group cursor-pointer aspect-video w-full">
-                    <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="block w-full h-full">
-                        <!-- YouTube Thumbnail Placeholder for Preview purposes -->
-                        <img src="https://img.youtube.com/vi/4utuRBR8a7U/maxresdefault.jpg" alt="延平建造之路紀錄片" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" onerror="this.src='https://placehold.co/1200x800/1D1B20/D0BCFF?text=Documentary+Video'">
+                        <!-- Center Frosted Play Badge -->
                         <div class="absolute inset-0 flex items-center justify-center">
-                            <!-- M3 FAB for Play -->
-                            <div class="w-20 h-20 rounded-2xl bg-m3-primary-container text-m3-on-primary-container flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                                <svg class="w-10 h-10 ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                            <div class="frosted-play-badge w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center text-apple-ink shadow-xl">
+                                <svg class="w-6 h-6 sm:w-8 sm:h-8 ml-1 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
                             </div>
                         </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+                    </div>
 
-    <!-- 4. Craftsmanship Gallery Section -->
-    <section id="gallery" class="py-32 bg-m3-surface-container-low relative z-10">
-        <div class="max-w-7xl mx-auto px-6 text-center mb-16 gallery-trigger">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 gallery-item text-m3-on-surface">虛實交錯的極致工藝</h2>
-            <p class="text-m3-on-surface-variant max-w-2xl mx-auto text-lg gallery-item">拖曳下方滑桿，親自見證現實校園磁磚紋理與 Minecraft 虛擬世界的驚人重合度。</p>
-        </div>
+                    <!-- Stage Bottom Bar: Video Caption + Clean Preview Pill Switcher -->
+                    <div class="absolute bottom-3.5 left-4 right-4 sm:bottom-7 sm:left-8 sm:right-8 flex flex-col lg:flex-row lg:items-end justify-between gap-3 sm:gap-4 pointer-events-none">
+                        <div class="text-white pointer-events-auto cursor-pointer" onclick="openActiveStageVideo()">
+                            <p id="hero-stage-meta" class="text-[11px] sm:text-xs font-medium text-white/80 mb-1">
+                                2026 / 11 / 07 發布 &bull; 概念預告
+                            </p>
+                            <p id="hero-stage-title" class="text-base sm:text-2xl font-bold tracking-tight">
+                                《YPIMC LIVE》氛圍概念展示
+                            </p>
+                        </div>
 
-        <div class="max-w-6xl mx-auto px-6 gallery-item">
-            <!-- M3 Container -->
-            <div class="comparison-slider rounded-m3-3xl shadow-xl" id="campus-slider">
-                <!-- Using placeholder.co images with correct colors to ensure preview works beautifully -->
-                <img src="https://placehold.co/1200x800/211F26/D0BCFF?text=YPIMC+Virtual+Campus" alt="延平中學 Minecraft 虛擬校園" class="slider-after">
-                <div class="image-label label-after bg-m3-surface-container-high text-m3-on-surface">YPIMC 虛擬校園</div>
-                
-                <div class="slider-before">
-                    <img src="https://placehold.co/1200x800/36343B/EFB8C8?text=Real+Life+Campus" alt="延平中學真實校園">
-                    <div class="image-label label-before bg-m3-tertiary-container text-m3-on-tertiary-container">
-                        <span class="w-2 h-2 rounded-full bg-m3-tertiary animate-pulse"></span>
-                        真實校園照片
+                        <!-- Clean Pill Switcher -->
+                        <div class="inline-flex items-center p-1 rounded-full bg-black/55 backdrop-blur-xl border border-white/15 pointer-events-auto self-start lg:self-auto" role="tablist" aria-label="切換預覽影片">
+                            <button type="button"
+                                    id="stage-tab-GZqicEcCrY0"
+                                    onclick="switchHeroStageVideo('GZqicEcCrY0')"
+                                    role="tab"
+                                    aria-selected="true"
+                                    class="min-h-[38px] px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-apple-ink shadow-sm">
+                                《YPIMC LIVE》氛圍概念展示
+                            </button>
+                            <button type="button"
+                                    id="stage-tab-FOpiZEy4mGs"
+                                    onclick="switchHeroStageVideo('FOpiZEy4mGs')"
+                                    role="tab"
+                                    aria-selected="false"
+                                    class="min-h-[38px] px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-medium transition-all text-white/85 hover:text-white">
+                                《延平建造之路》紀錄片
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="slider-handle"></div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 5. Phase 2 Teaser Section (M3 Expressive Solid Block) -->
-    <section id="phase2" class="py-32 relative bg-m3-bg">
-        <div class="max-w-7xl mx-auto px-6 phase2-trigger">
-            <!-- M3 Primary Container Block -->
-            <div class="bg-m3-primary-container text-m3-on-primary-container p-10 md:p-16 rounded-m3-3xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center shadow-lg relative overflow-hidden">
-                
-                <!-- Decorative Circle inside Card -->
-                <div class="absolute top-[-20%] right-[-10%] w-96 h-96 bg-[#D0BCFF] opacity-20 rounded-full blur-3xl"></div>
+        <!-- =================================================================
+             3. BOLD FULL-PAGE KINETIC MANIFESTO & OPPOSING MARQUEE BANDS (#FFFFFF)
+             ================================================================= -->
+        <section id="manifesto" class="relative bg-apple-white py-28 sm:py-44 overflow-hidden border-t border-black/[0.04]">
+            <!-- Opposing Scroll-Scrubbed Architectural Marquee Band 1 (Moves Left) -->
+            <div class="pointer-events-none select-none overflow-hidden mb-10 sm:mb-16" aria-hidden="true">
+                <div id="marquee-band-left"
+                     class="font-display font-black text-[13vw] sm:text-[9vw] leading-none tracking-tight text-[#F0F0F3] whitespace-nowrap will-change-transform">
+                    1:1 SCALE DIGITAL CAMPUS &bull; 200,000+ BLOCKS &bull; 1:1 SCALE DIGITAL CAMPUS &bull; 200,000+ BLOCKS &bull;
+                </div>
+            </div>
 
-                <!-- Left Content -->
-                <div class="text-center lg:text-left relative z-10">
-                    <div class="inline-flex items-center justify-center lg:justify-start gap-3 mb-6 phase2-item w-full">
-                        <span class="px-3 py-1 bg-m3-surface text-m3-on-surface rounded-lg text-sm font-display font-bold tracking-wide">PHASE II</span>
-                        <span class="font-display text-m3-on-primary-container font-medium">COMING SOON</span>
+            <!-- Centerpiece Sequential Scroll-Lit Statement -->
+            <div class="relative z-10 max-w-[1060px] mx-auto px-5 sm:px-8 text-center my-6 sm:my-10">
+                <h2 class="sr-only">YPIMC 核心宣言</h2>
+                <div id="manifesto-lines-wrap" class="font-display manifesto-headline space-y-2.5 sm:space-y-4">
+                    <span class="manifesto-line">記憶或許會隨時間褪色。</span>
+                    <span class="manifesto-line">但在這裡，<span class="manifesto-accent">每一塊磚瓦都永恆不朽。</span></span>
+                    <span class="manifesto-line">從校門磁磚到操場跑道，精準還原。</span>
+                    <span class="manifesto-line"><span class="manifesto-accent">2027 年 6 月</span>，伺服器正式開啟。</span>
+                </div>
+            </div>
+
+            <!-- Opposing Scroll-Scrubbed Architectural Marquee Band 2 (Moves Right) -->
+            <div class="pointer-events-none select-none overflow-hidden mt-10 sm:mt-16" aria-hidden="true">
+                <div id="marquee-band-right"
+                     class="font-display font-black text-[13vw] sm:text-[9vw] leading-none tracking-tight text-[#F0F0F3] whitespace-nowrap -translate-x-1/3 will-change-transform">
+                    YPIMC LIVE 2027.06 &bull; YANPING HIGH SCHOOL &bull; YPIMC LIVE 2027.06 &bull; YANPING HIGH SCHOOL &bull;
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             4. BOLD FULL-SCREEN PINNED 3-ACT KEYNOTE STAGE (#F5F5F7)
+             ================================================================= -->
+        <section id="three-acts" class="bg-apple-gray relative">
+            <div id="three-acts-stage" class="relative w-full min-h-screen flex flex-col justify-center py-20 md:py-0 px-5 sm:px-8 overflow-hidden">
+
+                <!-- Subtle Architectural Blueprint Crosshairs -->
+                <div class="hidden md:block absolute top-12 left-12 w-6 h-6 pointer-events-none text-black/15" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2v20M2 12h20"/></svg>
+                </div>
+                <div class="hidden md:block absolute bottom-12 left-12 w-6 h-6 pointer-events-none text-black/15" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2v20M2 12h20"/></svg>
+                </div>
+                <div class="hidden md:block absolute top-12 right-12 w-6 h-6 pointer-events-none text-black/15" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2v20M2 12h20"/></svg>
+                </div>
+                <div class="hidden md:block absolute bottom-12 right-12 w-6 h-6 pointer-events-none text-black/15" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2v20M2 12h20"/></svg>
+                </div>
+
+                <!-- Massive 32vw Background Counter ("01" -> "02" -> "03") -->
+                <div class="absolute inset-0 flex items-center justify-center md:justify-end md:pr-14 pointer-events-none select-none" aria-hidden="true">
+                    <span id="act-bg-number" class="font-display font-black text-[44vw] md:text-[32vw] leading-none tracking-tighter text-black/[0.04] will-change-transform">
+                        01
+                    </span>
+                </div>
+
+                <!-- Right-Edge Vertical Apple-Style Progress Pill Indicator (Desktop) -->
+                <div class="hidden md:flex flex-col items-center gap-3 fixed-local absolute right-8 top-1/2 -translate-y-1/2 z-20" aria-hidden="true">
+                    <div class="px-2.5 py-3 rounded-full bg-white/85 backdrop-blur-md border border-black/[0.07] shadow-sm flex flex-col items-center gap-2.5">
+                        <span id="act-pill-label" class="font-display text-[11px] font-bold tracking-tight text-apple-ink tabular-nums">
+                            01 / 03
+                        </span>
+                        <div class="w-1 h-16 rounded-full bg-black/10 overflow-hidden">
+                            <div id="act-pill-bar" class="w-full h-1/3 rounded-full bg-apple-emerald transition-all duration-300"></div>
+                        </div>
                     </div>
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 phase2-item">新生虛擬校園巡禮</h2>
-                    <p class="text-lg text-m3-on-primary-container/80 mb-10 leading-relaxed phase2-item">
-                        建築階段已經完美落幕，但我們的旅程才剛開始。<br>
-                        為迎接即將加入的延平人，伺服器將於<span class="font-bold text-m3-primary">開學前夕</span>專為錄取新生限時開放。<br>
-                        歡迎親自登入這座栩栩如生的數位校園。
+                </div>
+
+                <!-- Acts Container: Pinned Dramatic Blur-to-Sharp & Scale on Desktop / Stacked Cards on Mobile -->
+                <div class="relative z-10 max-w-[1060px] w-full mx-auto md:h-[380px] flex flex-col md:block gap-8">
+
+                    <!-- Act 01 -->
+                    <article id="act-card-1" class="act-card md:absolute md:inset-0 flex flex-col justify-center bg-apple-white md:bg-transparent p-8 sm:p-10 md:p-0 rounded-[28px] md:rounded-none border border-black/[0.05] md:border-none will-change-transform">
+                        <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-3.5">
+                            01 — 建築工藝
+                        </p>
+                        <h3 class="font-display act-headline text-apple-ink mb-5">
+                            二十萬顆方塊。實地丈量。
+                        </h3>
+                        <p class="text-base sm:text-xl md:text-2xl text-apple-secondary font-normal max-w-2xl leading-relaxed">
+                            從校門口經典磁磚、操場跑道紋理到教室課桌椅，主體校舍已 100% 竣工。
+                        </p>
+                    </article>
+
+                    <!-- Act 02 -->
+                    <article id="act-card-2" class="act-card md:absolute md:inset-0 flex flex-col justify-center md:opacity-0 md:pointer-events-none bg-apple-white md:bg-transparent p-8 sm:p-10 md:p-0 rounded-[28px] md:rounded-none border border-black/[0.05] md:border-none will-change-transform">
+                        <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-3.5">
+                            02 — 持續鮮活
+                        </p>
+                        <h3 class="font-display act-headline text-apple-ink mb-5">
+                            四季校園。持續更新。
+                        </h3>
+                        <p class="text-base sm:text-xl md:text-2xl text-apple-secondary font-normal max-w-2xl leading-relaxed">
+                            建築落成只是起點。團隊將隨校慶、聖誕晚會等校園節日，推出限時主題裝飾與彩蛋。
+                        </p>
+                    </article>
+
+                    <!-- Act 03 -->
+                    <article id="act-card-3" class="act-card md:absolute md:inset-0 flex flex-col justify-center md:opacity-0 md:pointer-events-none bg-apple-white md:bg-transparent p-8 sm:p-10 md:p-0 rounded-[28px] md:rounded-none border border-black/[0.05] md:border-none will-change-transform">
+                        <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-3.5">
+                            03 — 盛大開服
+                        </p>
+                        <h3 class="font-display act-headline text-apple-ink mb-5">
+                            群起喝采之地。
+                        </h3>
+                        <p class="text-base sm:text-xl md:text-2xl text-apple-secondary font-normal max-w-2xl leading-relaxed">
+                            《YPIMC LIVE》預計於 2027 年 6 月前後正式開放，邀請所有延平人與建築玩家連線相聚。
+                        </p>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             5. APPLE PRO 12-COLUMN BENTO GRID ("重點一覽" ON #FFFFFF)
+             ================================================================= -->
+        <section id="highlights" class="bg-apple-white py-24 sm:py-36 px-5 sm:px-8">
+            <div class="max-w-[1120px] mx-auto">
+                <div class="mb-12 sm:mb-16 bento-reveal">
+                    <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-2">
+                        HIGHLIGHTS
                     </p>
-                    
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-4 phase2-item">
-                        <!-- M3 High-Emphasis Button -->
-                        <button id="notify-btn" class="px-8 py-4 bg-m3-primary text-m3-on-primary font-display font-semibold rounded-full hover:bg-[#E8DEF8] transition-colors flex items-center justify-center space-x-2 text-lg">
-                            <span id="notify-text">獲取開放通知</span>
-                            <svg id="notify-icon" class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </button>
-                        <!-- M3 Outlined Button -->
-                        <button class="px-8 py-4 border-2 border-m3-on-primary-container/30 text-m3-on-primary-container font-display font-medium rounded-full hover:bg-m3-on-primary-container/10 transition-colors text-lg">
-                            了解設備需求
-                        </button>
+                    <h2 class="font-display section-headline text-apple-ink">
+                        重點一覽。
+                    </h2>
+                </div>
+
+                <!-- 12-Column Asymmetric Grid (gap: 24px) -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+                    <!-- Card 1 (8 cols, #F5F5F7): 《YPIMC LIVE》氛圍概念展示 -->
+                    <div onclick="openTheaterModal('GZqicEcCrY0')"
+                         role="button"
+                         tabindex="0"
+                         onkeydown="if(event.key==='Enter'||event.key===' ')openTheaterModal('GZqicEcCrY0')"
+                         class="md:col-span-8 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between cursor-pointer group bento-reveal">
+                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
+                            <div>
+                                <p class="text-xs font-semibold tracking-wide text-apple-emerald mb-2">
+                                    CONCEPT TRAILER
+                                </p>
+                                <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-apple-ink mb-2">
+                                    《YPIMC LIVE》氛圍概念展示
+                                </h3>
+                                <p class="text-sm sm:text-base text-apple-secondary">
+                                    搶先一窺伺服器光影氛圍與校園場景預告。
+                                </p>
+                            </div>
+                            <span class="min-h-[44px] px-5 py-2.5 rounded-full bg-apple-blue group-hover:bg-apple-blue-hover text-white text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5 shrink-0 self-start sm:self-auto transition-colors">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                <span>播放影片</span>
+                            </span>
+                        </div>
+
+                        <div class="relative rounded-[20px] overflow-hidden aspect-[16/9] bg-apple-ink">
+                            <img src="https://img.youtube.com/vi/GZqicEcCrY0/maxresdefault.jpg"
+                                 onerror="this.onerror=null;this.src='https://img.youtube.com/vi/GZqicEcCrY0/hqdefault.jpg';"
+                                 alt="《YPIMC LIVE》氛圍概念展示"
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+
+                    <!-- Card 2 (4 cols, Obsidian Pro #1D1D1F): 2027.06 距離開服倒數 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-ink text-white p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                        <div>
+                            <p class="text-xs font-semibold tracking-wide text-apple-mint mb-2">
+                                2027.06
+                            </p>
+                            <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                                距離開服倒數
+                            </h3>
+                        </div>
+
+                        <div class="my-8">
+                            <div class="flex items-baseline gap-2 mb-5">
+                                <span id="cd-days" class="font-display text-5xl sm:text-6xl font-extrabold tracking-tight tabular-nums text-white">
+                                    ---
+                                </span>
+                                <span class="text-sm font-medium text-apple-secondary">天</span>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2.5 text-center">
+                                <div class="rounded-2xl bg-white/[0.08] py-3 px-2">
+                                    <div id="cd-hours" class="font-display text-xl sm:text-2xl font-bold tabular-nums text-white">--</div>
+                                    <div class="text-[11px] text-apple-secondary mt-0.5">時</div>
+                                </div>
+                                <div class="rounded-2xl bg-white/[0.08] py-3 px-2">
+                                    <div id="cd-mins" class="font-display text-xl sm:text-2xl font-bold tabular-nums text-white">--</div>
+                                    <div class="text-[11px] text-apple-secondary mt-0.5">分</div>
+                                </div>
+                                <div class="rounded-2xl bg-white/[0.08] py-3 px-2">
+                                    <div id="cd-secs" class="font-display text-xl sm:text-2xl font-bold tabular-nums text-white">--</div>
+                                    <div class="text-[11px] text-apple-secondary mt-0.5">秒</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-apple-secondary leading-relaxed">
+                            目標開放時程：2027 年 6 月 1 日
+                        </p>
+                    </div>
+
+                    <!-- Card 3 (4 cols, #F5F5F7): 200,000+ 精準堆疊方塊數 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                        <p class="text-xs font-semibold tracking-wide text-apple-secondary">
+                            工程規模
+                        </p>
+                        <div class="my-7">
+                            <div class="font-display text-4xl sm:text-5xl font-extrabold tracking-tight text-apple-ink tabular-nums">
+                                <span class="bento-counter" data-target="200000">0</span>+
+                            </div>
+                        </div>
+                        <p class="text-sm sm:text-base text-apple-secondary leading-relaxed">
+                            精準堆疊方塊數，每一處細節皆歷經實地考據。
+                        </p>
+                    </div>
+
+                    <!-- Card 4 (4 cols, #F5F5F7): 1:1 真實校園比例還原，主體建築 100% 竣工 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                        <p class="text-xs font-semibold tracking-wide text-apple-secondary">
+                            建築精度
+                        </p>
+                        <div class="my-7 flex items-baseline gap-3">
+                            <span class="font-display text-5xl sm:text-6xl font-extrabold tracking-tight text-apple-ink">
+                                1:1
+                            </span>
+                            <span class="text-sm font-semibold text-apple-emerald">
+                                100% 竣工
+                            </span>
+                        </div>
+                        <p class="text-sm sm:text-base text-apple-secondary leading-relaxed">
+                            真實校園比例還原，主體建築全面完工。
+                        </p>
+                    </div>
+
+                    <!-- Card 5 (4 cols, #F5F5F7): 節慶限時裝飾 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                        <p class="text-xs font-semibold tracking-wide text-apple-secondary">
+                            持續更新
+                        </p>
+                        <div class="my-7">
+                            <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-apple-ink">
+                                節慶限時裝飾
+                            </h3>
+                        </div>
+                        <p class="text-sm sm:text-base text-apple-secondary leading-relaxed">
+                            校慶、聖誕晚會等特別活動期間持續更新校園佈景。
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
+             6. SCROLL-DRAWN VERTICAL ROADMAP ("開發歷程" ON #FFFFFF)
+             ================================================================= -->
+        <section id="milestones" class="bg-apple-white py-24 sm:py-36 px-5 sm:px-8 border-t border-black/[0.05]">
+            <div class="max-w-[960px] mx-auto">
+                <div class="mb-14 sm:mb-20 roadmap-header-reveal">
+                    <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-2">
+                        ROADMAP
+                    </p>
+                    <h2 class="font-display section-headline text-apple-ink">
+                        開發歷程。
+                    </h2>
+                </div>
+
+                <!-- Vertical Roadmap Container with Self-Drawing Progress Track -->
+                <div id="roadmap-track-container" class="relative pl-8 sm:pl-12">
+                    <!-- Static Subtle Track Line -->
+                    <div class="absolute left-[11px] sm:left-[15px] top-3 bottom-3 w-[2px] bg-black/[0.08] rounded-full" aria-hidden="true"></div>
+
+                    <!-- Scrubbed Self-Drawing Active Track Line -->
+                    <div id="roadmap-progress-line"
+                         class="absolute left-[11px] sm:left-[15px] top-3 bottom-3 w-[2px] bg-gradient-to-b from-apple-emerald to-apple-blue rounded-full origin-top scale-y-0 will-change-transform"
+                         aria-hidden="true">
+                    </div>
+
+                    <div class="space-y-12 sm:space-y-14">
+
+                        <!-- Node 1: 2025 / 09 / 26 -->
+                        <div class="roadmap-item relative">
+                            <span class="roadmap-dot absolute -left-8 sm:-left-12 top-1.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-apple-muted flex items-center justify-center transition-colors duration-300">
+                                <span class="roadmap-dot-core w-2.5 h-2.5 rounded-full bg-apple-muted transition-colors duration-300"></span>
+                            </span>
+                            <p class="font-display text-sm sm:text-base font-semibold text-apple-secondary tabular-nums mb-1">
+                                2025 / 09 / 26
+                            </p>
+                            <h3 class="font-display text-xl sm:text-2xl font-bold text-apple-ink">
+                                YPIMC 計畫正式立案
+                            </h3>
+                        </div>
+
+                        <!-- Node 2: 2025 / 12 / 06 -->
+                        <div class="roadmap-item relative">
+                            <span class="roadmap-dot absolute -left-8 sm:-left-12 top-1.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-apple-muted flex items-center justify-center transition-colors duration-300">
+                                <span class="roadmap-dot-core w-2.5 h-2.5 rounded-full bg-apple-muted transition-colors duration-300"></span>
+                            </span>
+                            <p class="font-display text-sm sm:text-base font-semibold text-apple-secondary tabular-nums mb-1">
+                                2025 / 12 / 06
+                            </p>
+                            <h3 class="font-display text-xl sm:text-2xl font-bold text-apple-ink">
+                                首次公開計畫內容
+                            </h3>
+                        </div>
+
+                        <!-- Node 3: 2026 / 03 / 15 -->
+                        <div class="roadmap-item relative">
+                            <span class="roadmap-dot absolute -left-8 sm:-left-12 top-1.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-apple-muted flex items-center justify-center transition-colors duration-300">
+                                <span class="roadmap-dot-core w-2.5 h-2.5 rounded-full bg-apple-muted transition-colors duration-300"></span>
+                            </span>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <p class="font-display text-sm sm:text-base font-semibold text-apple-secondary tabular-nums mb-1">
+                                        2026 / 03 / 15
+                                    </p>
+                                    <h3 class="font-display text-xl sm:text-2xl font-bold text-apple-ink">
+                                        發佈《延平建造之路》紀錄片
+                                    </h3>
+                                </div>
+                                <button type="button"
+                                        onclick="openTheaterModal('FOpiZEy4mGs')"
+                                        class="min-h-[44px] px-4 py-2 rounded-full bg-apple-gray hover:bg-black/[0.07] text-apple-ink text-xs sm:text-sm font-medium inline-flex items-center gap-1.5 self-start sm:self-auto shrink-0 transition-colors">
+                                    <svg class="w-3.5 h-3.5 text-apple-blue fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                    <span>觀看紀錄片</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Node 4: 2026 / 11 / 07 -->
+                        <div class="roadmap-item relative">
+                            <span class="roadmap-dot absolute -left-8 sm:-left-12 top-1.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-apple-muted flex items-center justify-center transition-colors duration-300">
+                                <span class="roadmap-dot-core w-2.5 h-2.5 rounded-full bg-apple-muted transition-colors duration-300"></span>
+                            </span>
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <p class="font-display text-sm sm:text-base font-semibold text-apple-secondary tabular-nums mb-1">
+                                        2026 / 11 / 07
+                                    </p>
+                                    <h3 class="font-display text-xl sm:text-2xl font-bold text-apple-ink">
+                                        發布《YPIMC LIVE》氛圍概念展示影片
+                                    </h3>
+                                </div>
+                                <button type="button"
+                                        onclick="openTheaterModal('GZqicEcCrY0')"
+                                        class="min-h-[44px] px-4 py-2 rounded-full bg-apple-blue hover:bg-apple-blue-hover text-white text-xs sm:text-sm font-medium inline-flex items-center gap-1.5 self-start sm:self-auto shrink-0 transition-colors">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                                    <span>觀看概念片</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Node 5: 2027 / 06 (Highlighted Upcoming Milestone) -->
+                        <div class="roadmap-item relative">
+                            <span class="roadmap-dot absolute -left-8 sm:-left-12 top-1.5 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-apple-emerald/15 border-2 border-apple-emerald flex items-center justify-center">
+                                <span class="roadmap-dot-core w-2.5 h-2.5 rounded-full bg-apple-emerald animate-pulse"></span>
+                            </span>
+                            <div class="p-6 sm:p-7 rounded-[24px] bg-apple-gray border border-apple-emerald/25 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <p class="font-display text-sm sm:text-base font-bold text-apple-emerald tabular-nums mb-1">
+                                        2027 / 06
+                                    </p>
+                                    <h3 class="font-display text-xl sm:text-2xl font-bold text-apple-ink">
+                                        《YPIMC LIVE》伺服器即將到來
+                                    </h3>
+                                </div>
+                                <span class="px-3.5 py-1.5 rounded-full bg-apple-emerald text-white text-xs font-semibold tracking-wide self-start sm:self-auto shrink-0">
+                                    即將開放
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Right Server Preview -->
-                <div class="relative rounded-m3-2xl overflow-hidden phase2-item aspect-video lg:aspect-square xl:aspect-video w-full shadow-2xl relative z-10">
-                    <img src="https://placehold.co/800x600/1C1B1F/E6E1E5?text=Server+Preview" alt="伺服器內部預覽" class="w-full h-full object-cover">
-                    <div class="absolute bottom-4 left-4 bg-m3-surface-container-highest text-m3-on-surface px-4 py-2 rounded-lg text-sm font-display font-medium flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full bg-m3-primary animate-pulse"></span>
-                        SERVER PREVIEW
+        <!-- =================================================================
+             7. CLEAN APPLE ACCORDION FAQ ("常見問題" ON #F5F5F7)
+             ================================================================= -->
+        <section id="faq" class="bg-apple-gray py-24 sm:py-36 px-5 sm:px-8">
+            <div class="max-w-[960px] mx-auto">
+                <div class="mb-12 sm:mb-16 faq-reveal">
+                    <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-2">
+                        FAQ
+                    </p>
+                    <h2 class="font-display section-headline text-apple-ink">
+                        常見問題。
+                    </h2>
+                </div>
+
+                <div class="space-y-3.5 sm:space-y-4">
+
+                    <!-- Q1 -->
+                    <div class="faq-item is-open faq-reveal rounded-[24px] bg-apple-white border border-black/[0.06] px-6 sm:px-8 py-5 sm:py-6">
+                        <button type="button" class="faq-trigger w-full min-h-[44px] text-left flex items-center justify-between gap-6" aria-expanded="true">
+                            <span class="font-display text-lg sm:text-xl font-bold text-apple-ink">
+                                YPIMC LIVE 什麼時候開放？誰可以進來玩？
+                            </span>
+                            <span class="faq-icon w-8 h-8 rounded-full bg-apple-gray flex items-center justify-center text-xl font-light text-apple-ink shrink-0 leading-none select-none" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-panel">
+                            <div class="faq-panel-inner">
+                                <p class="pt-4 text-base sm:text-[17px] text-apple-secondary leading-relaxed">
+                                    預計於 2027 年 6 月左右正式對外開放！無論你是延平在校生、準新生、畢業校友，或是一般對 Minecraft 建築有興趣的玩家，都歡迎屆時一起連線進入。
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-            </div>
-        </div>
-    </section>
+                    <!-- Q2 -->
+                    <div class="faq-item faq-reveal rounded-[24px] bg-apple-white border border-black/[0.06] px-6 sm:px-8 py-5 sm:py-6">
+                        <button type="button" class="faq-trigger w-full min-h-[44px] text-left flex items-center justify-between gap-6" aria-expanded="false">
+                            <span class="font-display text-lg sm:text-xl font-bold text-apple-ink">
+                                需要什麼版本的 Minecraft 才能連線？
+                            </span>
+                            <span class="faq-icon w-8 h-8 rounded-full bg-apple-gray flex items-center justify-center text-xl font-light text-apple-ink shrink-0 leading-none select-none" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-panel">
+                            <div class="faq-panel-inner">
+                                <p class="pt-4 text-base sm:text-[17px] text-apple-secondary leading-relaxed">
+                                    目前預計支援 Minecraft Java 版。詳細版本號與連線 IP 將於 2027 年開服前夕透過官方社群正式公布。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-    <!-- Footer -->
-    <footer class="bg-m3-surface py-16 relative z-10 mt-10">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-m3-on-surface-variant font-display">
-            <div class="mb-6 md:mb-0 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-8">
-                <div class="flex items-center gap-2">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-m3-primary"><path d="M12 2L2 22h20L12 2zm0 3.8l6.1 12.2H5.9L12 5.8z"/></svg>
-                    <span class="text-xl font-bold text-m3-on-surface">YPIMC</span> 
+                    <!-- Q3 -->
+                    <div class="faq-item faq-reveal rounded-[24px] bg-apple-white border border-black/[0.06] px-6 sm:px-8 py-5 sm:py-6">
+                        <button type="button" class="faq-trigger w-full min-h-[44px] text-left flex items-center justify-between gap-6" aria-expanded="false">
+                            <span class="font-display text-lg sm:text-xl font-bold text-apple-ink">
+                                校舍建築已經完工了，目前團隊還在更新什麼內容？
+                            </span>
+                            <span class="faq-icon w-8 h-8 rounded-full bg-apple-gray flex items-center justify-center text-xl font-light text-apple-ink shrink-0 leading-none select-none" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-panel">
+                            <div class="faq-panel-inner">
+                                <p class="pt-4 text-base sm:text-[17px] text-apple-secondary leading-relaxed">
+                                    1:1 校園主體結構已全面竣工，目前團隊會針對部分節日及活動（像是校慶、聖誕晚會等）進行限時裝飾與細節打磨。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="faq-item faq-reveal rounded-[24px] bg-apple-white border border-black/[0.06] px-6 sm:px-8 py-5 sm:py-6">
+                        <button type="button" class="faq-trigger w-full min-h-[44px] text-left flex items-center justify-between gap-6" aria-expanded="false">
+                            <span class="font-display text-lg sm:text-xl font-bold text-apple-ink">
+                                進到伺服器後可以自由破壞或蓋方塊嗎？
+                            </span>
+                            <span class="faq-icon w-8 h-8 rounded-full bg-apple-gray flex items-center justify-center text-xl font-light text-apple-ink shrink-0 leading-none select-none" aria-hidden="true">+</span>
+                        </button>
+                        <div class="faq-panel">
+                            <div class="faq-panel-inner">
+                                <p class="pt-4 text-base sm:text-[17px] text-apple-secondary leading-relaxed">
+                                    我們還在構思最適合的互動與遊玩機制，希望能在完整保留校園建築的同時，帶給大家最有趣的體驗，敬請期待後續公告！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <span class="text-center md:text-left">&copy; 2026 YPIMC PROJECT TEAM.<br>REBUILDING MEMORIES, BLOCK BY BLOCK.</span>
             </div>
-            <div class="flex space-x-8 text-base font-medium">
-                <a href="https://youtu.be/4utuRBR8a7U" target="_blank" rel="noopener noreferrer" class="hover:text-m3-primary transition-colors">YOUTUBE</a>
-                <a href="https://www.instagram.com/ypimc.official/" target="_blank" rel="noopener noreferrer" class="hover:text-m3-primary transition-colors">INSTAGRAM</a>
+        </section>
+
+    </main>
+
+    <!-- =====================================================================
+         8. MINIMAL APPLE FOOTER (#FFFFFF)
+         ===================================================================== -->
+    <footer class="bg-apple-white border-t border-black/10 py-12 sm:py-16 px-5 sm:px-8 text-xs text-apple-secondary">
+        <div class="max-w-[1120px] mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5">
+                <span class="font-display text-base font-bold tracking-tight text-apple-ink">YPIMC</span>
+                <div class="space-y-1">
+                    <p class="font-semibold text-apple-ink">&copy; 2026 YPIMC Project Team</p>
+                    <p>延平中學虛擬校園計畫 &bull; 1:1 Minecraft Digital Campus</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-x-6 gap-y-2 font-medium text-apple-ink/80">
+                <a href="https://www.youtube.com/watch?v=GZqicEcCrY0" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center hover:text-apple-blue transition-colors">
+                    YouTube (概念展示)
+                </a>
+                <a href="https://www.youtube.com/watch?v=FOpiZEy4mGs" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center hover:text-apple-blue transition-colors">
+                    YouTube (建造紀錄片)
+                </a>
+                <a href="https://www.instagram.com/ypimc.official/" target="_blank" rel="noopener noreferrer" class="min-h-[44px] inline-flex items-center hover:text-apple-blue transition-colors">
+                    Instagram (@ypimc.official)
+                </a>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script>
-        gsap.registerPlugin(ScrollTrigger);
+    <!-- =====================================================================
+         9. INTERACTIVE THEATER VIDEO MODAL
+         ===================================================================== -->
+    <div id="theater-modal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4 sm:p-6 bg-black/65 backdrop-blur-xl" role="dialog" aria-modal="true" aria-labelledby="modal-video-title">
+        <div id="theater-modal-dialog" class="w-full max-w-4xl rounded-[24px] sm:rounded-[28px] bg-apple-white overflow-hidden shadow-2xl transform scale-95 opacity-0 transition-all duration-200">
+            <!-- Modal Header -->
+            <div class="px-5 sm:px-6 py-4 bg-apple-gray border-b border-black/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="min-w-0">
+                    <p id="modal-video-date" class="text-[11px] font-medium text-apple-secondary">
+                        2026 / 11 / 07
+                    </p>
+                    <h3 id="modal-video-title" class="text-sm sm:text-base font-bold text-apple-ink truncate">
+                        《YPIMC LIVE》氛圍概念展示
+                    </h3>
+                </div>
+                <div class="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+                    <!-- Quick Switcher inside Modal -->
+                    <button type="button"
+                            id="modal-switch-btn"
+                            onclick="toggleModalVideo()"
+                            class="min-h-[38px] px-3.5 rounded-full bg-white hover:bg-black/[0.05] border border-black/10 text-apple-ink text-xs font-medium transition-colors">
+                        切換至紀錄片
+                    </button>
+                    <a id="modal-external-link"
+                       href="https://www.youtube.com/watch?v=GZqicEcCrY0"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="min-h-[38px] px-3.5 rounded-full bg-apple-blue hover:bg-apple-blue-hover text-white text-xs font-medium inline-flex items-center gap-1 transition-colors">
+                        <span>YouTube 開啟</span>
+                        <span aria-hidden="true">&rsaquo;</span>
+                    </a>
+                    <button type="button"
+                            id="modal-close-btn"
+                            aria-label="關閉影片播放器"
+                            class="w-10 h-10 rounded-full bg-black/[0.07] hover:bg-black/[0.14] text-apple-ink flex items-center justify-center text-sm font-semibold transition-colors">
+                        &#10005;
+                    </button>
+                </div>
+            </div>
 
-        // --- M3 Navigation Background Change ---
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-m3-surface-container/95', 'shadow-sm');
-                navbar.classList.remove('bg-transparent');
-            } else {
-                navbar.classList.remove('bg-m3-surface-container/95', 'shadow-sm');
-                navbar.classList.add('bg-transparent');
+            <!-- 16:9 Responsive Iframe -->
+            <div class="aspect-video w-full bg-black">
+                <iframe id="theater-video-iframe"
+                        class="w-full h-full"
+                        src=""
+                        title="YPIMC 官方影片播放"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
+         JAVASCRIPT: MOBILE MENU, HERO STAGE SWITCHER, MODAL, COUNTDOWN & GSAP
+         ===================================================================== -->
+    <script>
+        // 1. Mobile Navigation Drawer
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const mobileDrawer = document.getElementById('mobile-menu-drawer');
+        const iconOpen = document.getElementById('hamburger-open');
+        const iconClose = document.getElementById('hamburger-close');
+
+        function setMobileMenu(open) {
+            mobileDrawer.classList.toggle('is-open', open);
+            mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            iconOpen.classList.toggle('hidden', open);
+            iconClose.classList.toggle('hidden', !open);
+        }
+
+        mobileToggle.addEventListener('click', () => {
+            const isOpen = mobileDrawer.classList.contains('is-open');
+            setMobileMenu(!isOpen);
+        });
+
+        document.querySelectorAll('.mobile-drawer-link').forEach(link => {
+            link.addEventListener('click', () => setMobileMenu(false));
+        });
+
+        // 2. Video Catalog, Hero Stage Switcher & Theater Modal
+        const videoCatalog = {
+            'GZqicEcCrY0': {
+                meta: '2026 / 11 / 07 發布 • 概念預告',
+                title: '《YPIMC LIVE》氛圍概念展示',
+                poster: 'https://img.youtube.com/vi/GZqicEcCrY0/maxresdefault.jpg',
+                fallback: 'https://img.youtube.com/vi/GZqicEcCrY0/hqdefault.jpg',
+                externalUrl: 'https://www.youtube.com/watch?v=GZqicEcCrY0',
+                otherId: 'FOpiZEy4mGs',
+                switchLabel: '切換至建造紀錄片'
+            },
+            'FOpiZEy4mGs': {
+                meta: '2026 / 03 / 15 發布 • 官方紀錄片',
+                title: '《延平建造之路》紀錄片',
+                poster: 'https://img.youtube.com/vi/FOpiZEy4mGs/maxresdefault.jpg',
+                fallback: 'https://img.youtube.com/vi/FOpiZEy4mGs/hqdefault.jpg',
+                externalUrl: 'https://www.youtube.com/watch?v=FOpiZEy4mGs',
+                otherId: 'GZqicEcCrY0',
+                switchLabel: '切換至概念展示'
+            }
+        };
+
+        let activeStageVideoId = 'GZqicEcCrY0';
+        let activeModalVideoId = 'GZqicEcCrY0';
+
+        function switchHeroStageVideo(videoId) {
+            const item = videoCatalog[videoId];
+            if (!item) return;
+            activeStageVideoId = videoId;
+
+            const posterEl = document.getElementById('hero-stage-poster');
+            posterEl.onerror = function() {
+                this.onerror = null;
+                this.src = item.fallback;
+            };
+            posterEl.src = item.poster;
+            posterEl.alt = item.title;
+
+            document.getElementById('hero-stage-meta').textContent = item.meta;
+            document.getElementById('hero-stage-title').textContent = item.title;
+
+            Object.keys(videoCatalog).forEach(id => {
+                const tabBtn = document.getElementById(`stage-tab-${id}`);
+                const isSelected = id === videoId;
+                tabBtn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+                if (isSelected) {
+                    tabBtn.className = 'min-h-[38px] px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-medium transition-all bg-white text-apple-ink shadow-sm';
+                } else {
+                    tabBtn.className = 'min-h-[38px] px-3.5 sm:px-4 py-1.5 rounded-full text-xs font-medium transition-all text-white/85 hover:text-white';
+                }
+            });
+        }
+
+        function openActiveStageVideo() {
+            openTheaterModal(activeStageVideoId);
+        }
+
+        const theaterModal = document.getElementById('theater-modal');
+        const theaterDialog = document.getElementById('theater-modal-dialog');
+        const theaterIframe = document.getElementById('theater-video-iframe');
+
+        function openTheaterModal(videoId) {
+            const info = videoCatalog[videoId] || videoCatalog['GZqicEcCrY0'];
+            activeModalVideoId = videoId;
+
+            document.getElementById('modal-video-date').textContent = info.meta;
+            document.getElementById('modal-video-title').textContent = info.title;
+            document.getElementById('modal-external-link').href = info.externalUrl;
+            document.getElementById('modal-switch-btn').textContent = info.switchLabel;
+            theaterIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+            theaterModal.classList.remove('hidden');
+            theaterModal.classList.add('flex');
+            requestAnimationFrame(() => {
+                theaterDialog.classList.remove('scale-95', 'opacity-0');
+                theaterDialog.classList.add('scale-100', 'opacity-100');
+            });
+        }
+
+        function toggleModalVideo() {
+            const current = videoCatalog[activeModalVideoId] || videoCatalog['GZqicEcCrY0'];
+            openTheaterModal(current.otherId);
+        }
+
+        function closeTheaterModal() {
+            theaterDialog.classList.remove('scale-100', 'opacity-100');
+            theaterDialog.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                theaterIframe.src = '';
+                theaterModal.classList.add('hidden');
+                theaterModal.classList.remove('flex');
+            }, 200);
+        }
+
+        document.getElementById('modal-close-btn').addEventListener('click', closeTheaterModal);
+        theaterModal.addEventListener('click', (e) => {
+            if (e.target === theaterModal) closeTheaterModal();
+        });
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !theaterModal.classList.contains('hidden')) {
+                closeTheaterModal();
             }
         });
 
-        // --- Hero Animation ---
-        const paths = document.querySelectorAll('.draw-line');
-        paths.forEach(path => {
-            const length = path.getTotalLength();
-            path.style.strokeDasharray = length;
-            path.style.strokeDashoffset = length;
-        });
+        // 3. Live Countdown to June 1, 2027 (Taipei Time UTC+8)
+        const targetTimestamp = new Date('2027-06-01T00:00:00+08:00').getTime();
+        function updateCountdown() {
+            const remaining = Math.max(0, targetTimestamp - Date.now());
+            const days = Math.floor(remaining / 86400000);
+            const hours = Math.floor((remaining / 3600000) % 24);
+            const mins = Math.floor((remaining / 60000) % 60);
+            const secs = Math.floor((remaining / 1000) % 60);
 
-        // Material 3 favors 'emphasized' easing (deceleration)
-        const m3Ease = "power4.out";
+            document.getElementById('cd-days').textContent = String(days);
+            document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+            document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
 
-        const heroTl = gsap.timeline({delay: 0.1});
-        heroTl.fromTo(".gs-reveal", 
-            { y: 30, opacity: 0 },
-            { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: m3Ease }
-        );
+        // 4. FAQ Accordion
+        document.querySelectorAll('.faq-trigger').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parent = btn.closest('.faq-item');
+                const isAlreadyOpen = parent.classList.contains('is-open');
 
-        heroTl.to(".iso-path", { strokeDashoffset: 0, duration: 2, stagger: 0.1, ease: "power2.inOut" }, "-=0.8");
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('is-open');
+                    item.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+                });
 
-        // --- Stagger Animations ---
-        const setupScrollAnimation = (triggerClass, itemClass) => {
-            gsap.fromTo(itemClass,
-                { y: 40, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: m3Ease,
-                  scrollTrigger: { trigger: triggerClass, start: "top 80%", toggleActions: "play none none reverse" }
-                }
-            );
-        };
-        
-        setupScrollAnimation(".text-trigger", ".quote-item");
-        setupScrollAnimation(".data-trigger", ".data-item");
-        setupScrollAnimation(".gallery-trigger", ".gallery-item");
-        setupScrollAnimation(".phase2-trigger", ".phase2-item");
-
-        // --- Counters ---
-        const counters = document.querySelectorAll('.counter');
-        counters.forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'));
-            ScrollTrigger.create({
-                trigger: ".data-trigger", start: "top 75%", once: true,
-                onEnter: () => {
-                    gsap.to(counter, {
-                        innerHTML: target, duration: 2, ease: m3Ease, snap: { innerHTML: 1 },
-                        onUpdate: function() {
-                            if (target > 1000) counter.innerHTML = Math.round(this.targets()[0].innerHTML).toLocaleString();
-                        }
-                    });
+                if (!isAlreadyOpen) {
+                    parent.classList.add('is-open');
+                    btn.setAttribute('aria-expanded', 'true');
                 }
             });
         });
 
-        // --- Image Comparison Slider Logic ---
-        const slider = document.getElementById('campus-slider');
-        const sliderBefore = slider.querySelector('.slider-before');
-        const sliderBeforeImg = slider.querySelector('.slider-before img');
-        const handle = slider.querySelector('.slider-handle');
-        let isSliding = false;
+        // 5. Bold Full-Page GSAP + ScrollTrigger Choreography
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
 
-        function resizeSlider() { sliderBeforeImg.style.width = slider.offsetWidth + 'px'; }
-        window.addEventListener('resize', resizeSlider); resizeSlider();
+            // A. Top Scroll Progress Bar
+            gsap.to('#scroll-progress-bar', {
+                scaleX: 1,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: document.documentElement,
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    scrub: 0.15
+                }
+            });
 
-        function slide(e) {
-            if (!isSliding) return;
-            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
-            if (!clientX) return;
-            const rect = slider.getBoundingClientRect();
-            let xPos = clientX - rect.left;
-            if (xPos < 0) xPos = 0;
-            if (xPos > rect.width) xPos = rect.width;
-            const percent = (xPos / rect.width) * 100;
-            sliderBefore.style.width = percent + '%';
-            handle.style.left = percent + '%';
+            // B. Hero Entrance: Masked Line-by-Line Clip-Path Upward Reveal + Staggered Elements
+            const heroTl = gsap.timeline();
+            heroTl.fromTo('.hero-clip-line',
+                {
+                    yPercent: 105,
+                    clipPath: 'inset(0% 0% 100% 0%)'
+                },
+                {
+                    yPercent: 0,
+                    clipPath: 'inset(0% 0% 0% 0%)',
+                    duration: 1.05,
+                    stagger: 0.14,
+                    ease: 'expo.out'
+                }
+            ).fromTo('.hero-fade',
+                { y: 24, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'expo.out' },
+                '-=0.65'
+            );
+
+            // C. Hero Giant Watermark Horizontal Scrub
+            gsap.fromTo('#hero-watermark',
+                { xPercent: 8 },
+                {
+                    xPercent: -26,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#hero',
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: 0.4
+                    }
+                }
+            );
+
+            // D. Opposing Horizontal Architectural Marquee Bands
+            gsap.fromTo('#marquee-band-left',
+                { xPercent: 4 },
+                {
+                    xPercent: -28,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#manifesto',
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 0.35
+                    }
+                }
+            );
+
+            gsap.fromTo('#marquee-band-right',
+                { xPercent: -32 },
+                {
+                    xPercent: 4,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#manifesto',
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 0.35
+                    }
+                }
+            );
+
+            // E. Sequential Scroll-Lit Manifesto Lines
+            const manifestoLines = gsap.utils.toArray('.manifesto-line');
+            if (manifestoLines.length > 0) {
+                ScrollTrigger.create({
+                    trigger: '#manifesto',
+                    start: 'top 68%',
+                    end: 'bottom 42%',
+                    scrub: 0.2,
+                    onUpdate: (self) => {
+                        const litIndex = Math.floor(self.progress * (manifestoLines.length + 0.65));
+                        manifestoLines.forEach((line, idx) => {
+                            line.classList.toggle('is-lit', idx <= litIndex);
+                        });
+                    }
+                });
+            }
+
+            // F. Bento Grid Staggered Entrance & 200,000+ Counter
+            gsap.fromTo('.bento-reveal',
+                { y: 36, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.9,
+                    stagger: 0.09,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: '#highlights',
+                        start: 'top 82%',
+                        once: true
+                    }
+                }
+            );
+
+            gsap.utils.toArray('.bento-counter').forEach(counterEl => {
+                const target = parseInt(counterEl.getAttribute('data-target'), 10);
+                ScrollTrigger.create({
+                    trigger: counterEl,
+                    start: 'top 88%',
+                    once: true,
+                    onEnter: () => {
+                        const obj = { val: 0 };
+                        gsap.to(obj, {
+                            val: target,
+                            duration: 2,
+                            ease: 'expo.out',
+                            onUpdate: () => {
+                                counterEl.textContent = Math.round(obj.val).toLocaleString();
+                            }
+                        });
+                    }
+                });
+            });
+
+            // G. Scroll-Drawn Vertical Roadmap & Node Illumination
+            gsap.fromTo('.roadmap-header-reveal',
+                { y: 26, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.85,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: '#milestones',
+                        start: 'top 85%',
+                        once: true
+                    }
+                }
+            );
+
+            gsap.to('#roadmap-progress-line', {
+                scaleY: 1,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '#roadmap-track-container',
+                    start: 'top 72%',
+                    end: 'bottom 58%',
+                    scrub: 0.3
+                }
+            });
+
+            gsap.utils.toArray('.roadmap-item').forEach((item, idx) => {
+                const dot = item.querySelector('.roadmap-dot');
+                const core = item.querySelector('.roadmap-dot-core');
+
+                gsap.fromTo(item,
+                    { y: 24, opacity: 0.35 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.7,
+                        ease: 'expo.out',
+                        scrollTrigger: {
+                            trigger: item,
+                            start: 'top 76%',
+                            onEnter: () => {
+                                if (idx < 4 && dot && core) {
+                                    dot.classList.remove('border-apple-muted');
+                                    dot.classList.add('border-apple-emerald');
+                                    core.classList.remove('bg-apple-muted');
+                                    core.classList.add('bg-apple-emerald');
+                                }
+                            },
+                            onLeaveBack: () => {
+                                if (idx < 4 && dot && core) {
+                                    dot.classList.remove('border-apple-emerald');
+                                    dot.classList.add('border-apple-muted');
+                                    core.classList.remove('bg-apple-emerald');
+                                    core.classList.add('bg-apple-muted');
+                                }
+                            }
+                        }
+                    }
+                );
+            });
+
+            // H. FAQ Staggered Reveal
+            gsap.fromTo('.faq-reveal',
+                { y: 24, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    stagger: 0.08,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: '#faq',
+                        start: 'top 84%',
+                        once: true
+                    }
+                }
+            );
+
+            // I. Responsive Desktop vs Mobile Scroll Choreography
+            const mm = gsap.matchMedia();
+
+            // Desktop (>= 768px): Scrubbed Portal Expansion + Hero Depth Blur + Pinned 100vh 3-Act Keynote Stage
+            mm.add('(min-width: 768px)', () => {
+                // Hero Copy scales down & fades with depth blur as user scrolls into the Cinema Stage
+                gsap.to('#hero-copy-block', {
+                    scale: 0.92,
+                    y: -36,
+                    opacity: 0.25,
+                    filter: 'blur(8px)',
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#hero',
+                        start: 'top top',
+                        end: 'center top',
+                        scrub: 0.5
+                    }
+                });
+
+                // Cinema Stage expands dramatically from 78% (radius 32px) to 96vw (radius 20px)
+                gsap.fromTo('#hero-cinema-card',
+                    { width: '78%', borderRadius: '32px' },
+                    {
+                        width: '96vw',
+                        borderRadius: '20px',
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: '#hero-cinema-card',
+                            start: 'top 86%',
+                            end: 'center center',
+                            scrub: 0.5
+                        }
+                    }
+                );
+
+                // Pinned 100vh 3-Act Keynote Stage
+                const bgNumber = document.getElementById('act-bg-number');
+                const pillLabel = document.getElementById('act-pill-label');
+                const pillBar = document.getElementById('act-pill-bar');
+
+                function updateActHUD(step, progress) {
+                    bgNumber.textContent = `0${step}`;
+                    pillLabel.textContent = `0${step} / 03`;
+                    const barHeight = Math.max(33.3, Math.min(100, progress * 100));
+                    pillBar.style.height = `${barHeight}%`;
+                }
+
+                const actsTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: '#three-acts-stage',
+                        start: 'top top',
+                        end: '+=240%',
+                        pin: true,
+                        scrub: 0.6,
+                        onUpdate: (self) => {
+                            const p = self.progress;
+                            const step = p < 0.34 ? 1 : p < 0.68 ? 2 : 3;
+                            updateActHUD(step, p);
+                        }
+                    }
+                });
+
+                // Subtle scale pulse on giant 32vw background counter
+                actsTl.fromTo('#act-bg-number',
+                    { scale: 0.94 },
+                    { scale: 1.06, duration: 2.8, ease: 'none' },
+                    0
+                );
+
+                // Act 01 -> Dramatic scale up + blur out
+                actsTl.to('#act-card-1', {
+                    y: -60,
+                    scale: 1.08,
+                    filter: 'blur(16px)',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    duration: 0.85,
+                    ease: 'power2.inOut'
+                }, 0.55);
+
+                // Act 02 -> Blur-to-sharp & scale 0.9 -> 1
+                actsTl.fromTo('#act-card-2',
+                    { y: 64, scale: 0.9, filter: 'blur(16px)', opacity: 0, pointerEvents: 'none' },
+                    { y: 0, scale: 1, filter: 'blur(0px)', opacity: 1, pointerEvents: 'auto', duration: 0.85, ease: 'expo.out' },
+                    0.9
+                );
+
+                // Act 02 -> Scale up + blur out
+                actsTl.to('#act-card-2', {
+                    y: -60,
+                    scale: 1.08,
+                    filter: 'blur(16px)',
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    duration: 0.85,
+                    ease: 'power2.inOut'
+                }, 1.85);
+
+                // Act 03 -> Blur-to-sharp & scale 0.9 -> 1
+                actsTl.fromTo('#act-card-3',
+                    { y: 64, scale: 0.9, filter: 'blur(16px)', opacity: 0, pointerEvents: 'none' },
+                    { y: 0, scale: 1, filter: 'blur(0px)', opacity: 1, pointerEvents: 'auto', duration: 0.85, ease: 'expo.out' },
+                    2.2
+                );
+            });
+
+            // Mobile (< 768px): Clean Stacked Reveal Cards without Horizontal Overflow
+            mm.add('(max-width: 767px)', () => {
+                gsap.utils.toArray('.act-card').forEach((card, idx) => {
+                    gsap.fromTo(card,
+                        { y: 30, opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            duration: 0.8,
+                            ease: 'expo.out',
+                            scrollTrigger: {
+                                trigger: card,
+                                start: 'top 86%',
+                                once: true,
+                                onEnter: () => {
+                                    document.getElementById('act-bg-number').textContent = `0${idx + 1}`;
+                                }
+                            }
+                        }
+                    );
+                });
+            });
         }
-
-        slider.addEventListener('mousedown', (e) => { isSliding = true; slide(e); });
-        window.addEventListener('mouseup', () => isSliding = false);
-        window.addEventListener('mousemove', slide);
-        slider.addEventListener('touchstart', (e) => { isSliding = true; slide(e); }, {passive: true});
-        window.addEventListener('touchend', () => isSliding = false);
-        window.addEventListener('touchmove', (e) => { if(isSliding) { e.preventDefault(); slide(e); } }, {passive: false});
-
-        // --- Phase II Button Material Error State ---
-        const notifyBtn = document.getElementById('notify-btn');
-        const notifyText = document.getElementById('notify-text');
-        const notifyIcon = document.getElementById('notify-icon');
-        let isAnimating = false;
-
-        notifyBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (isAnimating) return; 
-            isAnimating = true;
-            
-            // Switch to M3 Error colors smoothly
-            this.classList.remove('bg-m3-primary', 'text-m3-on-primary', 'hover:bg-[#E8DEF8]');
-            this.classList.add('bg-m3-error', 'text-m3-on-error', 'cursor-not-allowed');
-            notifyText.innerText = '系統尚未開放';
-            notifyIcon.classList.add('hidden'); 
-
-            // Subtle nudge instead of violent shake
-            gsap.to(this, { x: 5, duration: 0.1, yoyo: true, repeat: 3 });
-
-            setTimeout(() => {
-                this.classList.remove('bg-m3-error', 'text-m3-on-error', 'cursor-not-allowed');
-                this.classList.add('bg-m3-primary', 'text-m3-on-primary', 'hover:bg-[#E8DEF8]');
-                notifyText.innerText = '獲取開放通知';
-                notifyIcon.classList.remove('hidden');
-                isAnimating = false;
-            }, 2500);
-        });
-
     </script>
 </body>
 </html>
