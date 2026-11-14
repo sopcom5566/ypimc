@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YPIMC</title>
+    <title>YPIMC | 延平中學虛擬校園計畫</title>
     <meta name="description" content="歷時數月實地丈量，以二十多萬顆方塊 1:1 砌出延平記憶。伺服器《YPIMC LIVE》將於 2027 年 6 月正式開放。">
 
     <!-- Tailwind CSS -->
@@ -165,6 +165,30 @@
             }
         }
 
+        /* GTA VI-Inspired Editorial Screenshot Card */
+        .gta-shot-card {
+            border-radius: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            transition: transform 0.55s var(--apple-ease), box-shadow 0.55s var(--apple-ease);
+        }
+        @media (min-width: 768px) {
+            .gta-shot-card {
+                border-radius: 28px;
+            }
+        }
+        .gta-shot-img {
+            transition: transform 0.65s var(--apple-ease);
+            will-change: transform;
+        }
+        @media (hover: hover) {
+            .gta-shot-card:hover {
+                box-shadow: 0 28px 60px rgba(0, 0, 0, 0.11);
+            }
+            .gta-shot-card:hover .gta-shot-img {
+                transform: scale(1.03);
+            }
+        }
+
         /* Frosted Play Button Badge */
         .frosted-play-badge {
             background: rgba(255, 255, 255, 0.85);
@@ -235,6 +259,7 @@
                 <nav class="flex items-center gap-6 text-[13px] font-medium text-apple-ink/80" aria-label="主導覽列">
                     <a href="#manifesto" class="hover:text-apple-ink transition-colors py-2">核心宣言</a>
                     <a href="#three-acts" class="hover:text-apple-ink transition-colors py-2">三大亮點</a>
+                    <a href="#screenshots" class="hover:text-apple-ink transition-colors py-2">實景截圖</a>
                     <a href="#highlights" class="hover:text-apple-ink transition-colors py-2">重點一覽</a>
                     <a href="#milestones" class="hover:text-apple-ink transition-colors py-2">開發歷程</a>
                     <a href="#faq" class="hover:text-apple-ink transition-colors py-2">常見問題</a>
@@ -276,6 +301,9 @@
                 </a>
                 <a href="#three-acts" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
                     <span>三大亮點</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
+                </a>
+                <a href="#screenshots" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
+                    <span>實景截圖</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
                 </a>
                 <a href="#highlights" class="mobile-drawer-link min-h-[46px] flex items-center justify-between">
                     <span>重點一覽</span><span class="text-apple-secondary text-xs">&rsaquo;</span>
@@ -525,9 +553,179 @@
         </section>
 
         <!-- =================================================================
+             4.5 GTA VI-INSPIRED EDITORIAL SCREENSHOT MOSAIC ("校園實景" ON #FFFFFF)
+             ================================================================= -->
+        <section id="screenshots" class="bg-apple-white py-24 sm:py-36 px-5 sm:px-8 border-t border-black/[0.04]">
+            <div class="max-w-[1200px] mx-auto">
+                <!-- Apple-Style Section Header -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16 shot-header-reveal">
+                    <div>
+                        <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-2">
+                            IN-GAME SCREENSHOTS
+                        </p>
+                        <h2 class="font-display section-headline text-apple-ink">
+                            校園實景。一磚一瓦。
+                        </h2>
+                    </div>
+                    <p class="text-base sm:text-lg text-apple-secondary max-w-md leading-relaxed">
+                        實機光影截圖。點擊任一畫面可進入全螢幕劇院模式檢視建築細節。
+                    </p>
+                </div>
+
+                <!-- Asymmetric GTA VI Editorial Mosaic -->
+                <div class="space-y-8 sm:space-y-12">
+
+                    <!-- Row 1: Full-Width Panoramic Lead Shot (01 / 04) -->
+                    <figure onclick="openScreenshotLightbox(0)"
+                            role="button"
+                            tabindex="0"
+                            onkeydown="if(event.key==='Enter'||event.key===' ')openScreenshotLightbox(0)"
+                            class="gta-shot-card group relative overflow-hidden bg-apple-gray cursor-pointer shot-reveal">
+                        <div class="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden">
+                            <img src="images/1.png"
+                                 onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='images/1.jpg';}else{this.onerror=null;this.src='https://placehold.co/1600x900/F5F5F7/1D1D1F?text=01+%E6%9A%AE%E8%89%B2%E6%AD%A3%E9%96%80%E6%A0%A1%E8%88%8D';}"
+                                 alt="暮色正門校舍 — 夕陽餘暉灑落建國南路街口"
+                                 class="gta-shot-img gta-parallax-img w-full h-[112%] -top-[6%] relative object-cover object-center">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"></div>
+
+                            <!-- Top-Right Expand Pill -->
+                            <div class="absolute top-4 right-4 sm:top-6 sm:right-6 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md text-apple-ink text-xs font-medium inline-flex items-center gap-1.5 shadow-sm transition-transform duration-300 group-hover:scale-105">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                                </svg>
+                                <span>全螢幕檢視</span>
+                            </div>
+
+                            <!-- Bottom Editorial Caption Overlay -->
+                            <figcaption class="absolute bottom-5 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8 text-white flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+                                <div>
+                                    <p class="font-display text-xs font-semibold tracking-widest text-apple-mint mb-1.5">
+                                        01 / 04 &bull; 建國南路正門
+                                    </p>
+                                    <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-1.5">
+                                        暮色正門校舍
+                                    </h3>
+                                    <p class="text-xs sm:text-base text-white/85 max-w-2xl leading-relaxed">
+                                        夕陽餘暉灑落建國南路街口，垂直「延平中學」金字校徽與紅綠燈路口完整重現。
+                                    </p>
+                                </div>
+                            </figcaption>
+                        </div>
+                    </figure>
+
+                    <!-- Row 2: Asymmetric 7-Col / 5-Col Staggered Duo (02 & 03) -->
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 items-start">
+
+                        <!-- Left 7-Col Card (02 / 04) -->
+                        <figure onclick="openScreenshotLightbox(1)"
+                                role="button"
+                                tabindex="0"
+                                onkeydown="if(event.key==='Enter'||event.key===' ')openScreenshotLightbox(1)"
+                                class="md:col-span-7 gta-shot-card group relative overflow-hidden bg-apple-gray cursor-pointer shot-reveal">
+                            <div class="relative aspect-[16/11] w-full overflow-hidden">
+                                <img src="images/2.png"
+                                     onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='images/2.jpg';}else{this.onerror=null;this.src='https://placehold.co/1200x825/F5F5F7/1D1D1F?text=02+%E9%80%B2%E8%8B%B1%E6%A8%93%E8%88%87%E6%98%AD%E9%99%BD%E6%A8%93';}"
+                                     alt="進英樓與昭陽樓 — 交錯的白色水平飾帶與墨綠磁磚立面"
+                                     class="gta-shot-img gta-parallax-img w-full h-[112%] -top-[6%] relative object-cover object-center">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"></div>
+
+                                <div class="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-white/85 backdrop-blur-md text-apple-ink flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                                    </svg>
+                                </div>
+
+                                <figcaption class="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7 text-white">
+                                    <p class="font-display text-xs font-semibold tracking-widest text-apple-mint mb-1">
+                                        02 / 04 &bull; 教學大樓立面
+                                    </p>
+                                    <h3 class="font-display text-xl sm:text-2xl font-bold tracking-tight mb-1">
+                                        進英樓與昭陽樓
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-white/85 leading-relaxed">
+                                        交錯的白色水平飾帶與墨綠磁磚立面，精準還原雙棟教學大樓的建築語彙。
+                                    </p>
+                                </figcaption>
+                            </div>
+                        </figure>
+
+                        <!-- Right 5-Col Staggered Card (03 / 04) -->
+                        <figure onclick="openScreenshotLightbox(2)"
+                                role="button"
+                                tabindex="0"
+                                onkeydown="if(event.key==='Enter'||event.key===' ')openScreenshotLightbox(2)"
+                                class="md:col-span-5 md:mt-16 gta-shot-card group relative overflow-hidden bg-apple-gray cursor-pointer shot-reveal">
+                            <div class="relative aspect-[4/3] w-full overflow-hidden">
+                                <img src="images/3.png"
+                                     onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='images/3.jpg';}else{this.onerror=null;this.src='https://placehold.co/1000x750/F5F5F7/1D1D1F?text=03+%E8%BD%89%E8%A7%92%E8%A1%97%E5%BB%93%E8%88%87%E6%9E%97%E8%94%AD';}"
+                                     alt="轉角街廓與林蔭 — 從斑馬線望向校舍轉角"
+                                     class="gta-shot-img gta-parallax-img w-full h-[112%] -top-[6%] relative object-cover object-center">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"></div>
+
+                                <div class="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-white/85 backdrop-blur-md text-apple-ink flex items-center justify-center shadow-sm transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                                    </svg>
+                                </div>
+
+                                <figcaption class="absolute bottom-5 left-5 right-5 sm:bottom-7 sm:left-7 sm:right-7 text-white">
+                                    <p class="font-display text-xs font-semibold tracking-widest text-apple-mint mb-1">
+                                        03 / 04 &bull; 校園周邊街景
+                                    </p>
+                                    <h3 class="font-display text-xl sm:text-2xl font-bold tracking-tight mb-1">
+                                        轉角街廓與林蔭
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-white/85 leading-relaxed">
+                                        從斑馬線望向校舍轉角，白牆綠磚與茂密行道樹勾勒出熟悉的上下學風景。
+                                    </p>
+                                </figcaption>
+                            </div>
+                        </figure>
+
+                    </div>
+
+                    <!-- Row 3: Wide Architectural Overview Card (04 / 04) -->
+                    <figure onclick="openScreenshotLightbox(3)"
+                            role="button"
+                            tabindex="0"
+                            onkeydown="if(event.key==='Enter'||event.key===' ')openScreenshotLightbox(3)"
+                            class="md:w-[88%] md:mx-auto gta-shot-card group relative overflow-hidden bg-apple-gray cursor-pointer shot-reveal">
+                        <div class="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden">
+                            <img src="images/4.png"
+                                 onerror="if(!this.dataset.triedJpg){this.dataset.triedJpg='1';this.src='images/4.jpg';}else{this.onerror=null;this.src='https://placehold.co/1600x900/F5F5F7/1D1D1F?text=04+%E6%93%8D%E5%A0%B4%E8%88%87%E4%B8%AD%E5%BA%AD%E5%85%A8%E6%99%AF';}"
+                                 alt="操場與中庭全景 — 俯瞰紅色跑道與藍黃配色雙籃球場"
+                                 class="gta-shot-img gta-parallax-img w-full h-[112%] -top-[6%] relative object-cover object-center">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent pointer-events-none"></div>
+
+                            <div class="absolute top-4 right-4 sm:top-6 sm:right-6 px-3.5 py-1.5 rounded-full bg-white/85 backdrop-blur-md text-apple-ink text-xs font-medium inline-flex items-center gap-1.5 shadow-sm transition-transform duration-300 group-hover:scale-105">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                                </svg>
+                                <span>全螢幕檢視</span>
+                            </div>
+
+                            <figcaption class="absolute bottom-5 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8 text-white">
+                                <p class="font-display text-xs font-semibold tracking-widest text-apple-mint mb-1.5">
+                                    04 / 04 &bull; 校園運動場域
+                                </p>
+                                <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-1.5">
+                                    操場與中庭全景
+                                </h3>
+                                <p class="text-xs sm:text-base text-white/85 max-w-2xl leading-relaxed">
+                                    俯瞰紅色跑道與藍黃配色雙籃球場，四面教學大樓環抱的校園核心。
+                                </p>
+                            </figcaption>
+                        </div>
+                    </figure>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =================================================================
              5. APPLE PRO 12-COLUMN BENTO GRID ("重點一覽" ON #FFFFFF)
              ================================================================= -->
-        <section id="highlights" class="bg-apple-white py-24 sm:py-36 px-5 sm:px-8">
+        <section id="highlights" class="bg-apple-gray py-24 sm:py-36 px-5 sm:px-8">
             <div class="max-w-[1120px] mx-auto">
                 <div class="mb-12 sm:mb-16 bento-reveal">
                     <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-2">
@@ -541,80 +739,79 @@
                 <!-- 12-Column Asymmetric Grid (gap: 24px) -->
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
-                    <!-- Card 1 (8 cols, #F5F5F7): 《YPIMC LIVE》氛圍概念展示 -->
+                    <!-- Card 1 (8 cols, #FFFFFF): 《YPIMC LIVE》氛圍概念展示 -->
                     <div onclick="openTheaterModal('GZqicEcCrY0')"
                          role="button"
                          tabindex="0"
                          onkeydown="if(event.key==='Enter'||event.key===' ')openTheaterModal('GZqicEcCrY0')"
-                         class="md:col-span-8 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between cursor-pointer group bento-reveal">
-                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-7">
+                         class="md:col-span-8 apple-bento-card bg-apple-white p-7 sm:p-10 flex flex-col justify-between cursor-pointer group bento-reveal">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                             <div>
-                                <p class="text-xs font-semibold tracking-wide text-apple-emerald mb-2">
+                                <p class="text-xs font-semibold tracking-wide text-apple-emerald mb-1">
                                     CONCEPT TRAILER
                                 </p>
-                                <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-apple-ink mb-2">
+                                <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-apple-ink">
                                     《YPIMC LIVE》氛圍概念展示
                                 </h3>
-                                <p class="text-sm sm:text-base text-apple-secondary">
-                                    搶先一窺伺服器光影氛圍與校園場景預告。
-                                </p>
                             </div>
-                            <span class="min-h-[44px] px-5 py-2.5 rounded-full bg-apple-blue group-hover:bg-apple-blue-hover text-white text-xs sm:text-sm font-medium inline-flex items-center justify-center gap-1.5 shrink-0 self-start sm:self-auto transition-colors">
-                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-                                <span>播放影片</span>
+                            <span class="text-sm font-medium text-apple-blue inline-flex items-center gap-1 shrink-0">
+                                <span>立即觀看</span>
+                                <span aria-hidden="true">&rsaquo;</span>
                             </span>
                         </div>
 
-                        <div class="relative rounded-[20px] overflow-hidden aspect-[16/9] bg-apple-ink">
+                        <div class="relative aspect-video rounded-[20px] overflow-hidden bg-apple-gray">
                             <img src="https://img.youtube.com/vi/GZqicEcCrY0/maxresdefault.jpg"
                                  onerror="this.onerror=null;this.src='https://img.youtube.com/vi/GZqicEcCrY0/hqdefault.jpg';"
-                                 alt="《YPIMC LIVE》氛圍概念展示"
-                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                                 alt="《YPIMC LIVE》氛圍概念展示封面"
+                                 class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
+                            <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                <div class="frosted-play-badge w-14 h-14 rounded-full flex items-center justify-center text-apple-ink shadow-md">
+                                    <svg class="w-5 h-5 ml-0.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Card 2 (4 cols, Obsidian Pro #1D1D1F): 2027.06 距離開服倒數 -->
+                    <!-- Card 2 (4 cols, Obsidian Dark Accent): 2027/06 伺服器開放倒數計時器 -->
                     <div class="md:col-span-4 apple-bento-card bg-apple-ink text-white p-7 sm:p-10 flex flex-col justify-between bento-reveal">
                         <div>
                             <p class="text-xs font-semibold tracking-wide text-apple-mint mb-2">
-                                2027.06
+                                2027 / 06 &bull; COMING SOON
                             </p>
-                            <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                            <h3 class="font-display text-2xl sm:text-3xl font-bold tracking-tight">
                                 距離開服倒數
                             </h3>
                         </div>
 
-                        <div class="my-8">
-                            <div class="flex items-baseline gap-2 mb-5">
-                                <span id="cd-days" class="font-display text-5xl sm:text-6xl font-extrabold tracking-tight tabular-nums text-white">
-                                    ---
-                                </span>
-                                <span class="text-sm font-medium text-apple-secondary">天</span>
+                        <div class="grid grid-cols-2 gap-3 my-7">
+                            <div class="rounded-[20px] bg-white/[0.08] p-4">
+                                <div id="cd-days" class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums">---</div>
+                                <div class="text-xs text-white/60 mt-1">天</div>
                             </div>
-
-                            <div class="grid grid-cols-3 gap-2.5 text-center">
-                                <div class="rounded-2xl bg-white/[0.08] py-3 px-2">
-                                    <div id="cd-hours" class="font-display text-xl sm:text-2xl font-bold tabular-nums text-white">--</div>
-                                    <div class="text-[11px] text-apple-secondary mt-0.5">時</div>
-                                </div>
-                                <div class="rounded-2xl bg-white/[0.08] py-3 px-2">
-                                    <div id="cd-mins" class="font-display text-xl sm:text-2xl font-bold tabular-nums text-white">--</div>
-                                    <div class="text-[11px] text-apple-secondary mt-0.5">分</div>
-                                </div>
-                                <div class="rounded-2xl bg-white/[0.08] py-3 px-2">
-                                    <div id="cd-secs" class="font-display text-xl sm:text-2xl font-bold tabular-nums text-white">--</div>
-                                    <div class="text-[11px] text-apple-secondary mt-0.5">秒</div>
-                                </div>
+                            <div class="rounded-[20px] bg-white/[0.08] p-4">
+                                <div id="cd-hours" class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums">--</div>
+                                <div class="text-xs text-white/60 mt-1">時</div>
+                            </div>
+                            <div class="rounded-[20px] bg-white/[0.08] p-4">
+                                <div id="cd-mins" class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums">--</div>
+                                <div class="text-xs text-white/60 mt-1">分</div>
+                            </div>
+                            <div class="rounded-[20px] bg-white/[0.08] p-4">
+                                <div id="cd-secs" class="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-apple-mint tabular-nums">--</div>
+                                <div class="text-xs text-white/60 mt-1">秒</div>
                             </div>
                         </div>
 
-                        <p class="text-xs sm:text-sm text-apple-secondary leading-relaxed">
-                            目標開放時程：2027 年 6 月 1 日
+                        <p class="text-xs sm:text-sm text-white/65 leading-relaxed">
+                            預計支援 Minecraft Java 版，於 2027 年 6 月正式開放。
                         </p>
                     </div>
 
-                    <!-- Card 3 (4 cols, #F5F5F7): 200,000+ 精準堆疊方塊數 -->
-                    <div class="md:col-span-4 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                    <!-- Card 3 (4 cols, #FFFFFF): 200,000+ 精準堆疊方塊數 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-white p-7 sm:p-10 flex flex-col justify-between bento-reveal">
                         <p class="text-xs font-semibold tracking-wide text-apple-secondary">
                             工程規模
                         </p>
@@ -628,8 +825,8 @@
                         </p>
                     </div>
 
-                    <!-- Card 4 (4 cols, #F5F5F7): 1:1 真實校園比例還原，主體建築 100% 竣工 -->
-                    <div class="md:col-span-4 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                    <!-- Card 4 (4 cols, #FFFFFF): 1:1 真實校園比例還原，主體建築 100% 竣工 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-white p-7 sm:p-10 flex flex-col justify-between bento-reveal">
                         <p class="text-xs font-semibold tracking-wide text-apple-secondary">
                             建築精度
                         </p>
@@ -646,8 +843,8 @@
                         </p>
                     </div>
 
-                    <!-- Card 5 (4 cols, #F5F5F7): 節慶限時裝飾 -->
-                    <div class="md:col-span-4 apple-bento-card bg-apple-gray p-7 sm:p-10 flex flex-col justify-between bento-reveal">
+                    <!-- Card 5 (4 cols, #FFFFFF): 節慶限時裝飾 -->
+                    <div class="md:col-span-4 apple-bento-card bg-apple-white p-7 sm:p-10 flex flex-col justify-between bento-reveal">
                         <p class="text-xs font-semibold tracking-wide text-apple-secondary">
                             持續更新
                         </p>
@@ -668,7 +865,7 @@
         <!-- =================================================================
              6. SCROLL-DRAWN VERTICAL ROADMAP ("開發歷程" ON #FFFFFF)
              ================================================================= -->
-        <section id="milestones" class="bg-apple-white py-24 sm:py-36 px-5 sm:px-8 border-t border-black/[0.05]">
+        <section id="milestones" class="bg-apple-white py-24 sm:py-36 px-5 sm:px-8 border-t border-black/[0.04]">
             <div class="max-w-[960px] mx-auto">
                 <div class="mb-14 sm:mb-20 roadmap-header-reveal">
                     <p class="text-xs sm:text-sm font-semibold tracking-wide text-apple-emerald mb-2">
@@ -679,18 +876,17 @@
                     </h2>
                 </div>
 
-                <!-- Vertical Roadmap Container with Self-Drawing Progress Track -->
+                <!-- Scroll-Drawn Progress Spine Container -->
                 <div id="roadmap-track-container" class="relative pl-8 sm:pl-12">
-                    <!-- Static Subtle Track Line -->
-                    <div class="absolute left-[11px] sm:left-[15px] top-3 bottom-3 w-[2px] bg-black/[0.08] rounded-full" aria-hidden="true"></div>
-
-                    <!-- Scrubbed Self-Drawing Active Track Line -->
+                    <!-- Static Muted Background Line -->
+                    <div class="absolute left-[11px] sm:left-[15px] top-2 bottom-2 w-[2px] bg-black/[0.08]" aria-hidden="true"></div>
+                    <!-- Active Emerald Line Drawn via ScrollTrigger -->
                     <div id="roadmap-progress-line"
-                         class="absolute left-[11px] sm:left-[15px] top-3 bottom-3 w-[2px] bg-gradient-to-b from-apple-emerald to-apple-blue rounded-full origin-top scale-y-0 will-change-transform"
+                         class="absolute left-[11px] sm:left-[15px] top-2 bottom-2 w-[2px] bg-apple-emerald origin-top scale-y-0 will-change-transform"
                          aria-hidden="true">
                     </div>
 
-                    <div class="space-y-12 sm:space-y-14">
+                    <div class="space-y-12 sm:space-y-16">
 
                         <!-- Node 1: 2025 / 09 / 26 -->
                         <div class="roadmap-item relative">
@@ -701,7 +897,7 @@
                                 2025 / 09 / 26
                             </p>
                             <h3 class="font-display text-xl sm:text-2xl font-bold text-apple-ink">
-                                YPIMC 計畫正式立案
+                                YPIMC 計畫立案
                             </h3>
                         </div>
 
@@ -961,6 +1157,81 @@
     </div>
 
     <!-- =====================================================================
+         10. GTA VI-STYLE FULLSCREEN SCREENSHOT LIGHTBOX MODAL
+         ===================================================================== -->
+    <div id="screenshot-lightbox"
+         class="fixed inset-0 z-[95] hidden flex-col justify-between p-4 sm:p-8 bg-black/90 backdrop-blur-2xl text-white select-none"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="lightbox-title">
+
+        <!-- Top Controls Bar -->
+        <div class="max-w-[1360px] w-full mx-auto flex items-center justify-between gap-4 z-10">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/10 border border-white/15">
+                <span id="lightbox-counter" class="font-display text-xs sm:text-sm font-bold tracking-wider tabular-nums text-apple-mint">
+                    01 / 04
+                </span>
+                <span class="text-white/30">|</span>
+                <span id="lightbox-tag" class="text-xs text-white/80">建國南路正門</span>
+            </div>
+
+            <button type="button"
+                    id="lightbox-close-btn"
+                    aria-label="關閉全螢幕圖片"
+                    class="w-11 h-11 rounded-full bg-white/12 hover:bg-white/25 border border-white/15 text-white flex items-center justify-center text-base font-semibold transition-colors">
+                &#10005;
+            </button>
+        </div>
+
+        <!-- Center Stage Image + Prev/Next Controls -->
+        <div class="relative flex-1 flex items-center justify-center my-4 min-h-0">
+            <button type="button"
+                    id="lightbox-prev-btn"
+                    aria-label="上一張截圖"
+                    class="absolute left-0 sm:left-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/12 hover:bg-white/25 border border-white/15 text-white flex items-center justify-center transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </button>
+
+            <div class="max-w-[1220px] max-h-[68vh] w-full flex items-center justify-center px-12 sm:px-16">
+                <img id="lightbox-image"
+                     src=""
+                     alt=""
+                     class="max-h-[68vh] w-auto max-w-full rounded-[20px] sm:rounded-[24px] object-contain shadow-[0_32px_80px_rgba(0,0,0,0.65)] border border-white/10 transition-opacity duration-200">
+            </div>
+
+            <button type="button"
+                    id="lightbox-next-btn"
+                    aria-label="下一張截圖"
+                    class="absolute right-0 sm:right-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/12 hover:bg-white/25 border border-white/15 text-white flex items-center justify-center transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Bottom Caption & Dot Indicators -->
+        <div class="max-w-[960px] w-full mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-4 z-10 pb-1">
+            <div>
+                <h3 id="lightbox-title" class="font-display text-xl sm:text-2xl font-bold tracking-tight text-white mb-1">
+                    暮色正門校舍
+                </h3>
+                <p id="lightbox-desc" class="text-xs sm:text-sm text-white/75 leading-relaxed max-w-2xl">
+                    夕陽餘暉灑落建國南路街口，垂直「延平中學」金字校徽與紅綠燈路口完整重現。
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0" role="tablist" aria-label="選擇截圖">
+                <button type="button" onclick="openScreenshotLightbox(0)" class="lightbox-dot h-2 w-7 rounded-full bg-white transition-all" aria-label="第 1 張"></button>
+                <button type="button" onclick="openScreenshotLightbox(1)" class="lightbox-dot h-2 w-2 rounded-full bg-white/35 hover:bg-white/60 transition-all" aria-label="第 2 張"></button>
+                <button type="button" onclick="openScreenshotLightbox(2)" class="lightbox-dot h-2 w-2 rounded-full bg-white/35 hover:bg-white/60 transition-all" aria-label="第 3 張"></button>
+                <button type="button" onclick="openScreenshotLightbox(3)" class="lightbox-dot h-2 w-2 rounded-full bg-white/35 hover:bg-white/60 transition-all" aria-label="第 4 張"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================================
          JAVASCRIPT: MOBILE MENU, HERO STAGE SWITCHER, MODAL, COUNTDOWN & GSAP
          ===================================================================== -->
     <script>
@@ -1084,9 +1355,118 @@
         theaterModal.addEventListener('click', (e) => {
             if (e.target === theaterModal) closeTheaterModal();
         });
+
+        // 2.5 GTA VI-Style Screenshot Lightbox Modal
+        const campusScreenshots = [
+            {
+                png: 'images/1.png',
+                jpg: 'images/1.jpg',
+                fallback: 'https://placehold.co/1600x900/1D1D1F/FFFFFF?text=01+%E6%9A%AE%E8%89%B2%E6%AD%A3%E9%96%80%E6%A0%A1%E8%88%8D',
+                tag: '建國南路正門',
+                title: '暮色正門校舍',
+                desc: '夕陽餘暉灑落建國南路街口，垂直「延平中學」金字校徽與紅綠燈路口完整重現。'
+            },
+            {
+                png: 'images/2.png',
+                jpg: 'images/2.jpg',
+                fallback: 'https://placehold.co/1600x1100/1D1D1F/FFFFFF?text=02+%E9%80%B2%E8%8B%B1%E6%A8%93%E8%88%87%E6%98%AD%E9%99%BD%E6%A8%93',
+                tag: '教學大樓立面',
+                title: '進英樓與昭陽樓',
+                desc: '交錯的白色水平飾帶與墨綠磁磚立面，精準還原雙棟教學大樓的建築語彙。'
+            },
+            {
+                png: 'images/3.png',
+                jpg: 'images/3.jpg',
+                fallback: 'https://placehold.co/1400x1050/1D1D1F/FFFFFF?text=03+%E8%BD%89%E8%A7%92%E8%A1%97%E5%BB%93%E8%88%87%E6%9E%97%E8%94%AD',
+                tag: '校園周邊街景',
+                title: '轉角街廓與林蔭',
+                desc: '從斑馬線望向校舍轉角，白牆綠磚與茂密行道樹勾勒出熟悉的上下學風景。'
+            },
+            {
+                png: 'images/4.png',
+                jpg: 'images/4.jpg',
+                fallback: 'https://placehold.co/1600x900/1D1D1F/FFFFFF?text=04+%E6%93%8D%E5%A0%B4%E8%88%87%E4%B8%AD%E5%BA%AD%E5%85%A8%E6%99%AF',
+                tag: '校園運動場域',
+                title: '操場與中庭全景',
+                desc: '俯瞰紅色跑道與藍黃配色雙籃球場，四面教學大樓環抱的校園核心。'
+            }
+        ];
+
+        const screenshotLightbox = document.getElementById('screenshot-lightbox');
+        const lightboxImg = document.getElementById('lightbox-image');
+        let currentShotIdx = 0;
+
+        function openScreenshotLightbox(index) {
+            currentShotIdx = (index + campusScreenshots.length) % campusScreenshots.length;
+            const shot = campusScreenshots[currentShotIdx];
+
+            lightboxImg.style.opacity = '0.35';
+            lightboxImg.dataset.triedJpg = '';
+            lightboxImg.onerror = function() {
+                if (!this.dataset.triedJpg) {
+                    this.dataset.triedJpg = '1';
+                    this.src = shot.jpg;
+                } else {
+                    this.onerror = null;
+                    this.src = shot.fallback;
+                }
+            };
+            lightboxImg.onload = function() {
+                this.style.opacity = '1';
+            };
+            lightboxImg.src = shot.png;
+            lightboxImg.alt = `${shot.title} — ${shot.desc}`;
+
+            document.getElementById('lightbox-counter').textContent = `0${currentShotIdx + 1} / 0${campusScreenshots.length}`;
+            document.getElementById('lightbox-tag').textContent = shot.tag;
+            document.getElementById('lightbox-title').textContent = shot.title;
+            document.getElementById('lightbox-desc').textContent = shot.desc;
+
+            document.querySelectorAll('.lightbox-dot').forEach((dot, idx) => {
+                if (idx === currentShotIdx) {
+                    dot.className = 'lightbox-dot h-2 w-7 rounded-full bg-white transition-all';
+                } else {
+                    dot.className = 'lightbox-dot h-2 w-2 rounded-full bg-white/35 hover:bg-white/60 transition-all';
+                }
+            });
+
+            screenshotLightbox.classList.remove('hidden');
+            screenshotLightbox.classList.add('flex');
+        }
+
+        function closeScreenshotLightbox() {
+            screenshotLightbox.classList.add('hidden');
+            screenshotLightbox.classList.remove('flex');
+        }
+
+        document.getElementById('lightbox-close-btn').addEventListener('click', closeScreenshotLightbox);
+        document.getElementById('lightbox-prev-btn').addEventListener('click', () => openScreenshotLightbox(currentShotIdx - 1));
+        document.getElementById('lightbox-next-btn').addEventListener('click', () => openScreenshotLightbox(currentShotIdx + 1));
+
+        screenshotLightbox.addEventListener('click', (e) => {
+            if (e.target === screenshotLightbox) closeScreenshotLightbox();
+        });
+
+        // Mobile Touch Swipe Support inside Lightbox
+        let touchStartX = 0;
+        screenshotLightbox.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        screenshotLightbox.addEventListener('touchend', (e) => {
+            const deltaX = e.changedTouches[0].screenX - touchStartX;
+            if (Math.abs(deltaX) > 48) {
+                openScreenshotLightbox(deltaX < 0 ? currentShotIdx + 1 : currentShotIdx - 1);
+            }
+        }, { passive: true });
+
         window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !theaterModal.classList.contains('hidden')) {
+            if (!theaterModal.classList.contains('hidden') && e.key === 'Escape') {
                 closeTheaterModal();
+            }
+            if (!screenshotLightbox.classList.contains('hidden')) {
+                if (e.key === 'Escape') closeScreenshotLightbox();
+                if (e.key === 'ArrowLeft') openScreenshotLightbox(currentShotIdx - 1);
+                if (e.key === 'ArrowRight') openScreenshotLightbox(currentShotIdx + 1);
             }
         });
 
@@ -1176,53 +1556,95 @@
                 }
             );
 
-            // D. Opposing Horizontal Architectural Marquee Bands
-            gsap.fromTo('#marquee-band-left',
-                { xPercent: 4 },
-                {
-                    xPercent: -28,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '#manifesto',
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: 0.35
-                    }
+            // D. Opposing Architectural Marquee Bands
+            gsap.to('#marquee-band-left', {
+                xPercent: -22,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '#manifesto',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.4
                 }
-            );
+            });
 
-            gsap.fromTo('#marquee-band-right',
-                { xPercent: -32 },
-                {
-                    xPercent: 4,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '#manifesto',
-                        start: 'top bottom',
-                        end: 'bottom top',
-                        scrub: 0.35
-                    }
+            gsap.to('#marquee-band-right', {
+                xPercent: 22,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '#manifesto',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.4
                 }
-            );
+            });
 
             // E. Sequential Scroll-Lit Manifesto Lines
             const manifestoLines = gsap.utils.toArray('.manifesto-line');
-            if (manifestoLines.length > 0) {
-                ScrollTrigger.create({
-                    trigger: '#manifesto',
-                    start: 'top 68%',
-                    end: 'bottom 42%',
-                    scrub: 0.2,
-                    onUpdate: (self) => {
-                        const litIndex = Math.floor(self.progress * (manifestoLines.length + 0.65));
-                        manifestoLines.forEach((line, idx) => {
-                            line.classList.toggle('is-lit', idx <= litIndex);
-                        });
-                    }
-                });
-            }
+            ScrollTrigger.create({
+                trigger: '#manifesto-lines-wrap',
+                start: 'top 76%',
+                end: 'bottom 42%',
+                scrub: 0.25,
+                onUpdate: (self) => {
+                    const activeCount = Math.ceil(self.progress * manifestoLines.length);
+                    manifestoLines.forEach((line, idx) => {
+                        line.classList.toggle('is-lit', idx < activeCount);
+                    });
+                }
+            });
 
-            // F. Bento Grid Staggered Entrance & 200,000+ Counter
+            // F. GTA VI-Style Screenshot Mosaic Entrance & Inner-Image Vertical Parallax
+            gsap.fromTo('.shot-header-reveal',
+                { y: 28, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.9,
+                    ease: 'expo.out',
+                    scrollTrigger: {
+                        trigger: '#screenshots',
+                        start: 'top 84%',
+                        once: true
+                    }
+                }
+            );
+
+            gsap.utils.toArray('.shot-reveal').forEach((card) => {
+                gsap.fromTo(card,
+                    { y: 42, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.95,
+                        ease: 'expo.out',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top 86%',
+                            once: true
+                        }
+                    }
+                );
+
+                const parallaxImg = card.querySelector('.gta-parallax-img');
+                if (parallaxImg) {
+                    gsap.fromTo(parallaxImg,
+                        { yPercent: -4 },
+                        {
+                            yPercent: 4,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: card,
+                                start: 'top bottom',
+                                end: 'bottom top',
+                                scrub: 0.4
+                            }
+                        }
+                    );
+                }
+            });
+
+            // G. Bento Grid Staggered Entrance & 200,000+ Counter
             gsap.fromTo('.bento-reveal',
                 { y: 36, opacity: 0 },
                 {
